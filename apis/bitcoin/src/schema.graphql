@@ -1,0 +1,124 @@
+type Blocks {
+  # Hash of this block
+  hash: String!
+
+  # The size of block data in bytes
+  size: Int!
+
+  # The size of block data in bytes excluding witness data
+  strippedSize: Int!
+
+  # Three times the base size plus the total size. https://github.com/bitcoin/bips/blob/master
+  weight: Int!
+
+  # The number of the block
+  number: Int!
+
+  # Protocol version specified in block header
+  version: Int!
+
+  # The root node of a Merkle tree, where leaves are transaction hashes
+  merkleRoot: Int!
+
+  # Block creation timestamp specified in block header
+  timeStamp: Date!
+
+  # Month of the block creation timestamp specified in block header
+  timeStampMonth: Date!
+
+  # Difficulty solution specified in block header
+  nonce: String!
+
+  # Difficulty threshold specified in block header
+  bits: String!
+
+  # Data specified in the coinbase transaction of this block
+  coinbaseParam: String!
+
+  # Number of transactions included in this block
+  transactionCount: Int!
+}
+
+type Inputs {
+  transactionHash: String!
+  blockHash: String!
+  blockNumber: Int!
+  blockTimeStamp: Date!
+  index: Int!
+  spentTransactionHash: String!
+  spentOutputIndex: Int!
+  ScriptAsm: String!
+  scriptHex: String!
+  sequence: Int!
+  requiredSignature: Int!
+  type: String!
+  addresses: String!
+  value: Int!
+}
+
+type Outputs {
+  transaction_hash: String!
+  block_hash: String!
+  block_number: Int!
+  block_timestamp: Date!
+  index: Int!
+  script_asm: String!
+  script_hex: String!
+  required_signatures: Int!
+  type: String!
+  addresses: String!
+  value: Int!
+}
+
+type Transactions {
+  # The hash of this transaction
+  hash: String!
+
+  # The size of this transaction in bytes
+  size: Int!
+
+  # The virtual transaction size (differs from size for witness transactions)
+  virtual_size: Int!
+
+  # Protocol version specified in block which contained this transaction
+  version: Int!
+
+  # Earliest time that miners can include the transaction in their hashing of the Merkle root to attach it in the latest block of the blockchain
+  lock_time: Int!
+
+  # Hash of the block which contains this transaction
+  block_hash: String!
+
+  # Number of the block which contains this transaction
+  block_number: Int!
+
+  # Timestamp of the block which contains this transaction
+  block_timestamp: Date!
+
+  # Month of the block which contains this transaction
+  block_timestamp_month: Date!
+
+  # The number of inputs in the transaction
+  input_count: Int!
+
+  # The number of outputs in the transaction
+  output_count: Int!
+
+  # Total value of inputs in the transaction
+  input_value: Int!
+
+  # Total value of outputs in the transaction
+  output_value: Int!
+
+  # true if this transaction is a coinbase transaction
+  is_coinbase: Boolean
+
+  # The fee paid by this transaction
+  fee: Int!
+
+  # Transaction inputs
+  inputs: Int!
+
+  # Transaction outputs
+  outputs: Int!
+}
