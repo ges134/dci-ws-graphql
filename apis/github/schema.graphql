@@ -1,0 +1,48 @@
+# Unique Git commits from open source repositories on GitHub, pre-grouped by repositories they appear in.
+type Commits {
+  commit: String!
+  tree: String!
+  parent: String!
+  author: String!
+  committer: String!
+  subject: String!
+  message: String!
+  trailer: String!
+  difference: String!
+  difference_truncated: Boolean!
+  repo_name: String!
+  encoding: String
+}
+
+# Unique file contents of text files under 1 MiB on the HEAD branch.
+# Can be joined to [bigquery-public-data:github_repos.files] table using the id columns to identify the repository and file path.
+type Contents {
+  id: String!
+  size: Int!
+  content: String
+  binary: Boolean!
+  copies: Number!
+}
+
+# File metadata for all files at HEAD.
+# Join with [bigquery-public-data:github_repos.contents] on id columns to search text.
+type Contents {
+  repo_name: String!
+  ref: String!
+  path: String!
+  mode: Int!
+  id: String!
+  symlink_target: String!
+}
+
+# Programming languages by repository as reported by GitHub's https://developer.github.com/v3/repos/#list-languages API
+type Languages {
+  repo_name: String!
+  language: String!
+}
+
+# Open source license SPDX code for each repository as detected by https://developer.github.com/v3/licenses/
+type Licenses {
+  repo_name: String!
+  license: String!
+}

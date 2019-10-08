@@ -37,6 +37,9 @@ type Blocks {
 
   # Number of transactions included in this block
   transactionCount: Int!
+
+  # The Cryptocurrency this Block belongs to
+  currency: CryptoCurrency!
 }
 
 type Inputs {
@@ -54,6 +57,9 @@ type Inputs {
   type: String!
   addresses: String!
   value: Int!
+
+  # The Cryptocurrency this Input belongs to
+  currency: CryptoCurrency!
 }
 
 type Outputs {
@@ -68,6 +74,9 @@ type Outputs {
   type: String!
   addresses: String!
   value: Int!
+
+  # The Cryptocurrency this Output belongs to
+  currency: CryptoCurrency!
 }
 
 type Transactions {
@@ -121,4 +130,13 @@ type Transactions {
 
   # Transaction outputs
   outputs: Int!
+
+  # The Cryptocurrency this Transaction belongs to
+  currency: CryptoCurrency!
+}
+
+enum CryptoCurrency {
+  Bitcoin
+  Dogecoin
+  Ethereum
 }
