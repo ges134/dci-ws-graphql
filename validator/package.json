@@ -1,0 +1,12 @@
+{
+  "name": "validator",
+  "version": "1.0.0",
+  "description": "Challenges validator for the practice part",
+  "main": "index.js",
+  "author": "Jessy Anglehart-Nunes",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "express": "^4.17.1"
+  }
+}
