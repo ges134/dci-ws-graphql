@@ -1,3 +1,15 @@
+type Query {
+  blocks: [Blocks!]!
+  inputs: [Inputs!]!
+  outputs: [Outputs!]!
+  transactions: [Transactions!]!
+  commits: [Commits!]!
+  contents: [Contents!]!
+  files: [Files!]!
+  languages: [Languages!]!
+  licenses: [Licenses!]!
+}
+
 type Blocks {
   # Hash of this block
   hash: String!
@@ -63,17 +75,17 @@ type Inputs {
 }
 
 type Outputs {
-  transaction_hash: String!
-  block_hash: String!
-  block_number: Int!
-  block_timestamp: Date!
+  transactionHash: String!
+  blockHash: String!
+  blockNumber: Int!
+  blockTimestamp: Date!
   index: Int!
-  script_asm: String!
-  script_hex: String!
-  required_signatures: Int!
+  scriptAsm: String!
+  scriptHex: String!
+  requiredSignatures: Int!
   type: String!
   addresses: String!
-  value: Int!
+  value: number
 
   # The Cryptocurrency this Output belongs to
   currency: CryptoCurrency!
@@ -93,34 +105,34 @@ type Transactions {
   version: Int!
 
   # Earliest time that miners can include the transaction in their hashing of the Merkle root to attach it in the latest block of the blockchain
-  lock_time: Int!
+  lockTime: Int!
 
   # Hash of the block which contains this transaction
-  block_hash: String!
+  blockHash: String!
 
   # Number of the block which contains this transaction
-  block_number: Int!
+  blockNumber: Int!
 
   # Timestamp of the block which contains this transaction
-  block_timestamp: Date!
+  blockTimestamp: Date!
 
   # Month of the block which contains this transaction
-  block_timestamp_month: Date!
+  blockTimestampMonth: Date!
 
   # The number of inputs in the transaction
-  input_count: Int!
+  inputCount: Int!
 
   # The number of outputs in the transaction
-  output_count: Int!
+  outputCount: Int!
 
   # Total value of inputs in the transaction
-  input_value: Int!
+  inputValue: Int!
 
   # Total value of outputs in the transaction
-  output_value: Int!
+  outputValue: Int!
 
   # true if this transaction is a coinbase transaction
-  is_coinbase: Boolean
+  isCoinbase: Boolean
 
   # The fee paid by this transaction
   fee: Int!
@@ -138,7 +150,7 @@ type Transactions {
 enum CryptoCurrency {
   Bitcoin
   Dogecoin
-  Ethereum
+  Litecoin
 }
 
 # Unique Git commits from open source repositories on GitHub, pre-grouped by repositories they appear in.
@@ -152,8 +164,8 @@ type Commits {
   message: String!
   trailer: String!
   difference: String!
-  difference_truncated: Boolean!
-  repo_name: String!
+  differenceTruncated: Boolean!
+  repoName: String!
   encoding: String
 }
 
@@ -169,23 +181,23 @@ type Contents {
 
 # File metadata for all files at HEAD.
 # Join with [bigquery-public-data:github_repos.contents] on id columns to search text.
-type Contents {
-  repo_name: String!
+type Files {
+  repoName: String!
   ref: String!
   path: String!
   mode: Int!
   id: String!
-  symlink_target: String!
+  symlinkTarget: String!
 }
 
 # Programming languages by repository as reported by GitHub's https://developer.github.com/v3/repos/#list-languages API
 type Languages {
-  repo_name: String!
+  repoName: String!
   language: String!
 }
 
 # Open source license SPDX code for each repository as detected by https://developer.github.com/v3/licenses/
 type Licenses {
-  repo_name: String!
+  repoName: String!
   license: String!
 }
