@@ -5,7 +5,7 @@ const {
 } = require('../dal');
 
 const blocks = async (root, args, context, info) => {
-  const connector = new Connector(datasets.blockchain, tables.blocks);
+  const connector = new Connector(datasets.blockchain, tables.blocks, args);
   const results = await connector.run();
   return results;
 }
@@ -23,13 +23,7 @@ const outputs = async (root, args, context, info) => {
 }
 
 const transactions = async (root, args, context, info) => {
-  const connector = new Connector(datasets.blockchain, tables.transactions);
-  const results = await connector.run();
-  return results;
-}
-
-const transactions = async (root, args, context, info) => {
-  const connector = new Connector(datasets.blockchain, tables.transactions);
+  const connector = new Connector(datasets.blockchain, tables.transactions, args);
   const results = await connector.run();
   return results;
 }

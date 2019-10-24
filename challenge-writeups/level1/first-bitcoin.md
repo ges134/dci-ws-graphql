@@ -1,6 +1,6 @@
 # Question
 
-Quel est le nom d'utilisateur de la première personne à avoir obtenu un bitcoin complet?
+Quel est le montant (en satoshi) des frais de la première transaction avec le bitcoin?
 
 # Flag
 

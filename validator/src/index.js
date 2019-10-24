@@ -1,9 +1,11 @@
+require('dotenv').config();
+
 const express = require('express');
+
+const challenges = require('../data/flags.json');
 
 const app = express();
 
-const challenges = ['chall'];
-const flags = ['flag-|-|3110'];
 const resolvers = [(submission) => {
   // TODO: faire un resolver.
 }]
@@ -21,7 +23,9 @@ app.post('/', (req, res) => {
     res.status(400).send('a challenge submission is needed');
   }
 
-  if (!challenge.includes(challenge)) {
+  const challengesNames = challenges.map(c => c.name);
+
+  if (!challengesNames.includes(challenge)) {
     res.status(404).send('the challenge mentionned does not exist');
   }
 })

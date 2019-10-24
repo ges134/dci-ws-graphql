@@ -1,8 +1,14 @@
+scalar Date
+
 type Query {
-  blocks: [Blocks!]!
+  blocks(currency: CryptoCurrency, orderCol: BlockCols, top: Int): [Blocks!]!
   inputs: [Inputs!]!
   outputs: [Outputs!]!
-  transactions: [Transactions!]!
+  transactions(
+    currency: CryptoCurrency
+    orderCol: TransactionCols
+    top: Int
+  ): [Transactions!]!
   commits: [Commits!]!
   contents: [Contents!]!
   files: [Files!]!
@@ -54,6 +60,22 @@ type Blocks {
   currency: CryptoCurrency!
 }
 
+enum BlockCols {
+  hash
+  size
+  strippedSize
+  weight
+  number
+  version
+  merkleRoot
+  timeStamp
+  timeStampMonth
+  nonce
+  bits
+  coinbaseParam
+  transactionCount
+}
+
 type Inputs {
   transactionHash: String!
   blockHash: String!
@@ -85,7 +107,7 @@ type Outputs {
   requiredSignatures: Int!
   type: String!
   addresses: String!
-  value: number
+  value: Int!
 
   # The Cryptocurrency this Output belongs to
   currency: CryptoCurrency!
@@ -147,6 +169,26 @@ type Transactions {
   currency: CryptoCurrency!
 }
 
+enum TransactionCols {
+  hash
+  size
+  virtual_size
+  version
+  lockTime
+  blockHash
+  blockNumber
+  blockTimestamp
+  blockTimestampMonth
+  inputCount
+  outputCount
+  inputValue
+  outputValue
+  isCoinbase
+  fee
+  inputs
+  outputs
+}
+
 enum CryptoCurrency {
   Bitcoin
   Dogecoin
@@ -176,7 +218,7 @@ type Contents {
   size: Int!
   content: String
   binary: Boolean!
-  copies: Number!
+  copies: Int!
 }
 
 # File metadata for all files at HEAD.
