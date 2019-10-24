@@ -1,14 +1,10 @@
 scalar Date
 
 type Query {
-  blocks(currency: CryptoCurrency, orderCol: BlockCols, top: Int): [Blocks!]!
+  blocks(): [Blocks!]!
   inputs: [Inputs!]!
   outputs: [Outputs!]!
-  transactions(
-    currency: CryptoCurrency
-    orderCol: TransactionCols
-    top: Int
-  ): [Transactions!]!
+  transactions(): [Transactions!]!
   commits: [Commits!]!
   contents: [Contents!]!
   files: [Files!]!
@@ -58,22 +54,6 @@ type Blocks {
 
   # The Cryptocurrency this Block belongs to
   currency: CryptoCurrency!
-}
-
-enum BlockCols {
-  hash
-  size
-  strippedSize
-  weight
-  number
-  version
-  merkleRoot
-  timeStamp
-  timeStampMonth
-  nonce
-  bits
-  coinbaseParam
-  transactionCount
 }
 
 type Inputs {
@@ -167,79 +147,4 @@ type Transactions {
 
   # The Cryptocurrency this Transaction belongs to
   currency: CryptoCurrency!
-}
-
-enum TransactionCols {
-  hash
-  size
-  virtual_size
-  version
-  lockTime
-  blockHash
-  blockNumber
-  blockTimestamp
-  blockTimestampMonth
-  inputCount
-  outputCount
-  inputValue
-  outputValue
-  isCoinbase
-  fee
-  inputs
-  outputs
-}
-
-enum CryptoCurrency {
-  Bitcoin
-  Dogecoin
-  Litecoin
-}
-
-# Unique Git commits from open source repositories on GitHub, pre-grouped by repositories they appear in.
-type Commits {
-  commit: String!
-  tree: String!
-  parent: String!
-  author: String!
-  committer: String!
-  subject: String!
-  message: String!
-  trailer: String!
-  difference: String!
-  differenceTruncated: Boolean!
-  repoName: String!
-  encoding: String
-}
-
-# Unique file contents of text files under 1 MiB on the HEAD branch.
-# Can be joined to [bigquery-public-data:github_repos.files] table using the id columns to identify the repository and file path.
-type Contents {
-  id: String!
-  size: Int!
-  content: String
-  binary: Boolean!
-  copies: Int!
-}
-
-# File metadata for all files at HEAD.
-# Join with [bigquery-public-data:github_repos.contents] on id columns to search text.
-type Files {
-  repoName: String!
-  ref: String!
-  path: String!
-  mode: Int!
-  id: String!
-  symlinkTarget: String!
-}
-
-# Programming languages by repository as reported by GitHub's https://developer.github.com/v3/repos/#list-languages API
-type Languages {
-  repoName: String!
-  language: String!
-}
-
-# Open source license SPDX code for each repository as detected by https://developer.github.com/v3/licenses/
-type Licenses {
-  repoName: String!
-  license: String!
 }
