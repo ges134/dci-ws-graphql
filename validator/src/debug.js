@@ -1,8 +1,8 @@
 require('dotenv').config();
 const {
-  firstBitcoin
+  trafficLightCount
 } = require('./resolvers');
 
-firstBitcoin.resolver().then(() => {
+trafficLightCount().then(() => {
   console.log('thou hast resolved')
 });

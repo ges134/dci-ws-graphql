@@ -1,150 +1,42 @@
 scalar Date
 
 type Query {
-  blocks(): [Blocks!]!
-  inputs: [Inputs!]!
-  outputs: [Outputs!]!
-  transactions(): [Transactions!]!
-  commits: [Commits!]!
-  contents: [Contents!]!
-  files: [Files!]!
-  languages: [Languages!]!
-  licenses: [Licenses!]!
+  trafficLightCount(intersection: String): [TrafficLight!]!
 }
 
-type Blocks {
-  # Hash of this block
-  hash: String!
-
-  # The size of block data in bytes
-  size: Int!
-
-  # The size of block data in bytes excluding witness data
-  strippedSize: Int!
-
-  # Three times the base size plus the total size. https://github.com/bitcoin/bips/blob/master
-  weight: Int!
-
-  # The number of the block
-  number: Int!
-
-  # Protocol version specified in block header
-  version: Int!
-
-  # The root node of a Merkle tree, where leaves are transaction hashes
-  merkleRoot: Int!
-
-  # Block creation timestamp specified in block header
-  timeStamp: Date!
-
-  # Month of the block creation timestamp specified in block header
-  timeStampMonth: Date!
-
-  # Difficulty solution specified in block header
-  nonce: String!
-
-  # Difficulty threshold specified in block header
-  bits: String!
-
-  # Data specified in the coinbase transaction of this block
-  coinbaseParam: String!
-
-  # Number of transactions included in this block
-  transactionCount: Int!
-
-  # The Cryptocurrency this Block belongs to
-  currency: CryptoCurrency!
-}
-
-type Inputs {
-  transactionHash: String!
-  blockHash: String!
-  blockNumber: Int!
-  blockTimeStamp: Date!
-  index: Int!
-  spentTransactionHash: String!
-  spentOutputIndex: Int!
-  ScriptAsm: String!
-  scriptHex: String!
-  sequence: Int!
-  requiredSignature: Int!
-  type: String!
-  addresses: String!
-  value: Int!
-
-  # The Cryptocurrency this Input belongs to
-  currency: CryptoCurrency!
-}
-
-type Outputs {
-  transactionHash: String!
-  blockHash: String!
-  blockNumber: Int!
-  blockTimestamp: Date!
-  index: Int!
-  scriptAsm: String!
-  scriptHex: String!
-  requiredSignatures: Int!
-  type: String!
-  addresses: String!
-  value: Int!
-
-  # The Cryptocurrency this Output belongs to
-  currency: CryptoCurrency!
-}
-
-type Transactions {
-  # The hash of this transaction
-  hash: String!
-
-  # The size of this transaction in bytes
-  size: Int!
-
-  # The virtual transaction size (differs from size for witness transactions)
-  virtual_size: Int!
-
-  # Protocol version specified in block which contained this transaction
-  version: Int!
-
-  # Earliest time that miners can include the transaction in their hashing of the Merkle root to attach it in the latest block of the blockchain
-  lockTime: Int!
-
-  # Hash of the block which contains this transaction
-  blockHash: String!
-
-  # Number of the block which contains this transaction
-  blockNumber: Int!
-
-  # Timestamp of the block which contains this transaction
-  blockTimestamp: Date!
-
-  # Month of the block which contains this transaction
-  blockTimestampMonth: Date!
-
-  # The number of inputs in the transaction
-  inputCount: Int!
-
-  # The number of outputs in the transaction
-  outputCount: Int!
-
-  # Total value of inputs in the transaction
-  inputValue: Int!
-
-  # Total value of outputs in the transaction
-  outputValue: Int!
-
-  # true if this transaction is a coinbase transaction
-  isCoinbase: Boolean
-
-  # The fee paid by this transaction
-  fee: Int!
-
-  # Transaction inputs
-  inputs: Int!
-
-  # Transaction outputs
-  outputs: Int!
-
-  # The Cryptocurrency this Transaction belongs to
-  currency: CryptoCurrency!
+type TrafficLight {
+  referenceId: Int!
+  intersectionId: Int!
+  intersectionName: String!
+  date: Date!
+  period: Date!
+  hour: Int!
+  minute: Int!
+  second: Int!
+  bankCode: Int!
+  bankCodeDescription: String!
+  NBLT: Int!
+  NBT: Int!
+  NBRT: Int!
+  NBUT: Int!
+  SBLT: Int!
+  SBT: Int!
+  SBRT: Int!
+  SBUT: Int!
+  EBLT: Int!
+  EBT: Int!
+  EBRT: Int!
+  EBUT: Int!
+  WBLT: Int!
+  WBT: Int!
+  WBRT: Int!
+  WBUT: Int!
+  northApproach: Int!
+  southApproach: Int!
+  eastApproach: Int!
+  westApproach: Int!
+  xLocalisation: String!
+  yLocalisation: String!
+  longitude: Float!
+  latitude: Float!
 }

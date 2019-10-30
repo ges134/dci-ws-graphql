@@ -1,26 +1,15 @@
 // eslint-disable-next-line no-unused-vars
-const blocks = async (root, args, context, info) => {
-  throw new Error('not implemented');
-};
+const trafficLightCount = (root, args, context, info) => {
+  const {
+    intersection
+  } = args;
+  if (intersection) {
+    return context.trafficLightData.filter(value => value.intersectionName === intersection);
+  }
 
-// eslint-disable-next-line no-unused-vars
-const inputs = async (root, args, context, info) => {
-  throw new Error('not implemented');
-};
-
-// eslint-disable-next-line no-unused-vars
-const outputs = async (root, args, context, info) => {
-  throw new Error('not implemented');
-};
-
-// eslint-disable-next-line no-unused-vars
-const transactions = async (root, args, context, info) => {
-  throw new Error('not implemented');
+  return context.trafficLightData;
 };
 
 module.exports = {
-  blocks,
-  inputs,
-  outputs,
-  transactions
+  trafficLightCount
 };
