@@ -1,7 +1,11 @@
 scalar Date
 
 type Query {
-  trafficLightCount(intersection: String): [TrafficLight!]!
+  trafficLightCount(
+    intersection: String
+    beginHour: Int
+    endHour: Int
+  ): [TrafficLight!]!
 }
 
 type TrafficLight {

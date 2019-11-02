@@ -1,8 +1,8 @@
 require('dotenv').config();
 const {
-  trafficLightCount
+  thatsAWholeLotOfCommutes
 } = require('./resolvers');
 
-trafficLightCount().then(() => {
+thatsAWholeLotOfCommutes().then(() => {
   console.log('thou hast resolved')
 });

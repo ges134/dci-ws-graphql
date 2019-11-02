@@ -126,6 +126,104 @@ const trafficLightCount = async () => {
   console.log(`pb:${percentageBike};pc:${percentageCar};pp:${percentagePedestrian}`);
 };
 
+const thatsAWholeLotOfCommutes = async () => {
+  const query = `
+    query {
+      trafficLightCount(beginHour: 5, endHour: 9) {
+        intersectionName
+        NBLT
+        NBT
+        NBRT
+        NBUT
+        SBLT
+        SBT
+        SBRT
+        SBUT
+        EBLT
+        EBT
+        EBRT
+        EBUT
+        WBLT
+        WBT
+        WBRT
+        WBUT
+        northApproach
+        southApproach
+        eastApproach
+        westApproach
+      }
+    }
+  `;
+
+  const {
+    trafficLightCount
+  } = await request(`${host}/`, query);
+
+  const intersections = [];
+  const count = [];
+
+  trafficLightCount.forEach(value => {
+    const {
+      intersectionName,
+      NBLT,
+      NBT,
+      NBRT,
+      NBUT,
+      SBLT,
+      SBT,
+      SBRT,
+      SBUT,
+      EBLT,
+      EBT,
+      EBRT,
+      EBUT,
+      WBLT,
+      WBT,
+      WBRT,
+      WBUT,
+      northApproach,
+      southApproach,
+      eastApproach,
+      westApproach
+    } = value;
+
+    const total = NBLT +
+      NBT +
+      NBRT +
+      NBUT +
+      SBLT +
+      SBT +
+      SBRT +
+      SBUT +
+      EBLT +
+      EBT +
+      EBRT +
+      EBUT +
+      WBLT +
+      WBT +
+      WBRT +
+      WBUT +
+      northApproach +
+      southApproach +
+      eastApproach +
+      westApproach;
+
+    if (intersections.includes(intersectionName)) {
+      const idx = intersections.indexOf(intersectionName);
+      count[idx] += total;
+    } else {
+      intersections.push(intersectionName);
+      count.push(total);
+    }
+  });
+  const sortedCount = count.sort((a, b) => a - b).reverse();
+
+  const idx = count.indexOf(sortedCount[0]);
+  console.log(intersections[idx]);
+  console.log(count[idx]);
+}
+
 module.exports = {
-  trafficLightCount
+  trafficLightCount,
+  thatsAWholeLotOfCommutes
 };
