@@ -18,3 +18,5 @@ Par exemple, si on obtient le classement suivant:
 La réponse serait : `d:ouest-e:24`
 
 ## Réponse
+
+`d:nord-e:2674883`
