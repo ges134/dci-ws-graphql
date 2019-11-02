@@ -5,6 +5,7 @@ type Query {
     intersection: String
     beginHour: Int
     endHour: Int
+    bankCode: Int
   ): [TrafficLight!]!
 }
 

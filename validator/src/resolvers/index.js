@@ -223,7 +223,57 @@ const thatsAWholeLotOfCommutes = async () => {
   console.log(count[idx]);
 }
 
+const whereDoPedestriansGo = async () => {
+  const query = `
+    query {
+      trafficLightCount(bankCode: 10) {
+        northApproach
+        southApproach
+        eastApproach
+        westApproach
+      }
+    }
+  `;
+
+  const {
+    trafficLightCount
+  } = await request(`${host}/`, query);
+
+  let north = 0,
+    south = 0,
+    west = 0,
+    east = 0;
+
+  trafficLightCount.forEach(e => {
+    north += e.northApproach;
+    south += e.southApproach;
+    west += e.westApproach;
+    east += e.eastApproach;
+  });
+
+  const ranking = [north, south, west, east].sort((a, b) => a - b).reverse();
+  const difference = ranking[0] + ranking[1];
+
+  let direction = '';
+  if (ranking[0] === north) {
+    direction = 'nord';
+  } else if (ranking[0] === south) {
+    direction = 'sud';
+  } else if (ranking[0] === west) {
+    direction = 'ouest';
+  } else if (ranking[0] === east) {
+    direction = 'est';
+  }
+
+  console.log(north);
+  console.log(east);
+  console.log(south);
+  console.log(west);
+  console.log(`d:${direction}-e:${difference}`)
+}
+
 module.exports = {
   trafficLightCount,
-  thatsAWholeLotOfCommutes
+  thatsAWholeLotOfCommutes,
+  whereDoPedestriansGo
 };

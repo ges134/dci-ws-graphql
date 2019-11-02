@@ -1,8 +1,8 @@
 require('dotenv').config();
 const {
-  thatsAWholeLotOfCommutes
+  whereDoPedestriansGo
 } = require('./resolvers');
 
-thatsAWholeLotOfCommutes().then(() => {
+whereDoPedestriansGo().then(() => {
   console.log('thou hast resolved')
 });

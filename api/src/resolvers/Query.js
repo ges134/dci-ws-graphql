@@ -3,7 +3,8 @@ const trafficLightCount = (root, args, context, info) => {
   const {
     intersection,
     beginHour,
-    endHour
+    endHour,
+    bankCode
   } = args;
   let results = context.trafficLightData;
   if (intersection) {
@@ -14,6 +15,9 @@ const trafficLightCount = (root, args, context, info) => {
     const filterEndHour = endHour || 23;
 
     results = results.filter(value => value.hour > filterBeginHour && value.hour < filterEndHour);
+  }
+  if (bankCode) {
+    results = results.filter(value => value.bankCode === bankCode);
   }
 
   return results;
