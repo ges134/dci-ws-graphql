@@ -272,8 +272,117 @@ const whereDoPedestriansGo = async () => {
   console.log(`d:${direction}-e:${difference}`)
 }
 
+const trucksAndMoreTrucks = async () => {
+  const codes = [1, 2, 14, 15, 16];
+
+  let cle = 0,
+    clo = 0,
+    c = 0,
+    cp = 0,
+    ca = 0;
+
+  codes.forEach(async code => {
+    const query = `
+      query {
+        trafficLightCount(bankCode: ${code}) {
+          NBLT
+          NBT
+          NBRT
+          NBUT
+          SBLT
+          SBT
+          SBRT
+          SBUT
+          EBLT
+          EBT
+          EBRT
+          EBUT
+          WBLT
+          WBT
+          WBRT
+          WBUT
+        }
+      }
+    `
+
+    let sum = 0;
+
+    const {
+      trafficLightCount
+    } = await request(`${host}/`, query);
+
+    trafficLightCount.forEach(e => {
+      const {
+        NBLT,
+        NBT,
+        NBRT,
+        NBUT,
+        SBLT,
+        SBT,
+        SBRT,
+        SBUT,
+        EBLT,
+        EBT,
+        EBRT,
+        EBUT,
+        WBLT,
+        WBT,
+        WBRT,
+        WBUT
+      } = e;
+
+      sum += NBLT +
+        NBT +
+        NBRT +
+        NBUT +
+        SBLT +
+        SBT +
+        SBRT +
+        SBUT +
+        EBLT +
+        EBT +
+        EBRT +
+        EBUT +
+        WBLT +
+        WBT +
+        WBRT +
+        WBUT
+    });
+
+    switch (code) {
+      case 1:
+        cle += sum;
+        break;
+      case 2:
+        clo += sum;
+        break;
+      case 14:
+        c += sum;
+        break;
+      case 15:
+        cp += sum;
+        break;
+      case 16:
+        ca += sum;
+        break;
+    }
+
+    const total = cle + clo + c + cp + ca;
+    const percentages = [Math.round(cle / total * 100), Math.round(clo / total * 100), Math.round(c / total * 100), Math.round(cp / total * 100), Math.round(ca / total * 100)];
+
+    console.log(cle);
+    console.log(clo);
+    console.log(c);
+    console.log(cp);
+    console.log(ca);
+
+    console.log(`cle:${percentages[0]}-clo:${percentages[1]}-c:${percentages[2]}-cp:${percentages[3]}-ca:${percentages[4]}`);
+  });
+}
+
 module.exports = {
   trafficLightCount,
   thatsAWholeLotOfCommutes,
-  whereDoPedestriansGo
+  whereDoPedestriansGo,
+  trucksAndMoreTrucks
 };
