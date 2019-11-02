@@ -380,9 +380,46 @@ const trucksAndMoreTrucks = async () => {
   });
 }
 
+const highSteaks = async () => {
+  const query = `
+    query {
+      foodInspectionOffenders {
+        establishment
+        amount
+      }
+    }
+  `
+
+  const {
+    foodInspectionOffenders
+  } = await request(`${host}/`, query);
+
+  const establishments = [];
+  const amounts = [];
+
+  foodInspectionOffenders.forEach(value => {
+    const {
+      establishment,
+      amount
+    } = value;
+
+    if (establishments.includes(establishment)) {
+      amounts[establishments.indexOf(establishment)] += amount;
+    } else {
+      establishments.push(establishment);
+      amounts.push(amount);
+    }
+  });
+
+  const highestFined = establishments[amounts.indexOf(amounts.sort((a, b) => a - b).reverse()[0])];
+
+  console.log(highestFined);
+}
+
 module.exports = {
   trafficLightCount,
   thatsAWholeLotOfCommutes,
   whereDoPedestriansGo,
-  trucksAndMoreTrucks
+  trucksAndMoreTrucks,
+  highSteaks
 };

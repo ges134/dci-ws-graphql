@@ -1,5 +1,9 @@
 const Query = require('./resolvers/Query');
 const {
+  parseAmount
+} = require('./helpers');
+
+const {
   GraphQLServer
 } = require('graphql-yoga');
 const csv = require('csv-parser');
@@ -96,19 +100,54 @@ fs.createReadStream('./src/data/comptage-feux-2014-2018.csv')
     console.log('read traffic light count data!');
     console.log(`${trafficLightData.length} entries were read`);
 
-    console.log('starting graphQL server...');
-    const resolvers = {
-      Query
-    };
+    console.log('reading into food inspection offenders...');
+    const foodInspectionOffenders = [];
+    loggedData = false;
 
-    const server = new GraphQLServer({
-      typeDefs: './src/schema.graphql',
-      resolvers,
-      context: request => ({
-        ...request,
-        trafficLightData
+    fs.createReadStream('./src/data/inspection-aliments-contrevenants.csv')
+      .pipe(csv({
+        separator: ';'
+      }))
+      .on('data', data => {
+        if (!loggedData) {
+          console.log('Here is a sample data for food inspection offenders!');
+          console.log(data);
+          loggedData = true;
+        }
+
+        foodInspectionOffenders.push({
+          address: data['/contrevenant/addresse'],
+          category: data['/contrevenant/categorie'],
+          violationDate: new Date(data['/contrevenant/date_infraction']),
+          judgementDate: new Date(data['/contrevenant/date_jugement']),
+          description: data['/contrevenant/description'],
+          establishment: data['/contrevenant/etablissement'],
+          amount: parseAmount(data['/contrevenant/montant']),
+          owner: data['/contrevenant/proprietaire'],
+          city: data['/contrevenant/ville']
+        });
       })
-    });
+      .on('end', () => {
+        console.log('read food inspection offenders data data!');
+        console.log(`${foodInspectionOffenders.length} entries were read`);
 
-    server.start(() => console.log('Server is running on http://localhost:4000'));
+        console.log('read all csv files!');
+
+        console.log('starting graphQL server...');
+        const resolvers = {
+          Query
+        };
+
+        const server = new GraphQLServer({
+          typeDefs: './src/schema.graphql',
+          resolvers,
+          context: request => ({
+            ...request,
+            trafficLightData,
+            foodInspectionOffenders,
+          })
+        });
+
+        server.start(() => console.log('Server is running on http://localhost:4000'));
+      });
   });

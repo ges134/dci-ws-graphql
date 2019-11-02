@@ -7,6 +7,7 @@ type Query {
     endHour: Int
     bankCode: Int
   ): [TrafficLight!]!
+  foodInspectionOffenders: [FoodInspectionOffenders!]!
 }
 
 type TrafficLight {
@@ -44,4 +45,16 @@ type TrafficLight {
   yLocalisation: String!
   longitude: Float!
   latitude: Float!
+}
+
+type FoodInspectionOffenders {
+  address: String!
+  category: String!
+  violationDate: Date!
+  judgementDate: Date!
+  description: String!
+  establishment: String!
+  amount: Int!
+  owner: String!
+  city: String!
 }

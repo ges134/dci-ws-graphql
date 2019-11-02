@@ -23,6 +23,12 @@ const trafficLightCount = (root, args, context, info) => {
   return results;
 };
 
+// eslint-disable-next-line no-unused-vars
+const foodInspectionOffenders = (root, args, context, info) => {
+  return context.foodInspectionOffenders;
+};
+
 module.exports = {
-  trafficLightCount
+  trafficLightCount,
+  foodInspectionOffenders
 };
