@@ -1,8 +1,8 @@
 require('dotenv').config();
 const {
-  highSteaks
+  aLotOfFines
 } = require('./resolvers');
 
-highSteaks().then(() => {
+aLotOfFines().then(() => {
   console.log('thou hast resolved')
 });

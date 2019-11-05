@@ -1,6 +1,7 @@
 const Query = require('./resolvers/Query');
 const {
-  parseAmount
+  parseAmount,
+  toDate
 } = require('./helpers');
 
 const {
@@ -8,6 +9,13 @@ const {
 } = require('graphql-yoga');
 const csv = require('csv-parser');
 const fs = require('fs');
+const moment = require('moment');
+
+console.log('setting dependencies...');
+moment.locale('fr-ca');
+console.log(moment.locale());
+
+console.log('dependencies set!')
 
 console.log('reading csv files...');
 
@@ -115,11 +123,14 @@ fs.createReadStream('./src/data/comptage-feux-2014-2018.csv')
           loggedData = true;
         }
 
+        const violationDate = moment(data['/contrevenant/date_infraction'], 'DD MMMM YYYY').toDate();
+        console.log(violationDate);
+
         foodInspectionOffenders.push({
           address: data['/contrevenant/addresse'],
           category: data['/contrevenant/categorie'],
-          violationDate: new Date(data['/contrevenant/date_infraction']),
-          judgementDate: new Date(data['/contrevenant/date_jugement']),
+          violationDate: moment(data['/contrevenant/date_infraction'], 'DD MMMM YYYY').toDate(),
+          judgementDate: moment(data['/contrevenant/date_jugement'], 'DD MMMM YYYY').toDate(),
           description: data['/contrevenant/description'],
           establishment: data['/contrevenant/etablissement'],
           amount: parseAmount(data['/contrevenant/montant']),

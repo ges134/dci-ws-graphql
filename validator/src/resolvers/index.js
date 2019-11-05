@@ -416,10 +416,60 @@ const highSteaks = async () => {
   console.log(highestFined);
 }
 
+const aLotOfFines = async () => {
+  const query = `
+    query {
+      foodInspectionOffenders {
+        violationDate
+        amount
+      }
+    }
+  `
+
+  const {
+    foodInspectionOffenders
+  } = await request(`${host}/`, query);
+
+  dates = [];
+  counts = [];
+
+  foodInspectionOffenders.forEach(value => {
+    const {
+      violationDate
+    } = value;
+
+    console.log(violationDate);
+
+    if (dates.includes(violationDate)) {
+      counts[dates.indexOf(violationDate)] += 1;
+    } else {
+      dates.push(violationDate);
+      counts.push(1);
+    }
+  });
+
+  const dateWithMostInfractions = dates[counts.indexOf(counts.sort((a, b) => a - b).reverse()[0])];
+
+  const amountsOfMostInfractions = foodInspectionOffenders
+    .filter(value => value.violationDate === dateWithMostInfractions)
+    .map(value => value.amount);
+
+  let total = 0;
+
+  amountsOfMostInfractions.forEach(amount => {
+    total += amount
+  });
+
+  const average = Math.round(total / amountsOfMostInfractions.length);
+
+  console.log(average);
+}
+
 module.exports = {
   trafficLightCount,
   thatsAWholeLotOfCommutes,
   whereDoPedestriansGo,
   trucksAndMoreTrucks,
-  highSteaks
+  highSteaks,
+  aLotOfFines
 };
