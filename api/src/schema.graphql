@@ -63,6 +63,7 @@ type FoodInspectionOffenders {
 type PoliceIntervention {
   category: String!
   date: Date!
+  shift: String!
   station: Int!
   x: Float!
   y: Float!

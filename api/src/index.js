@@ -138,7 +138,6 @@ fs.createReadStream('./src/data/comptage-feux-2014-2018.csv')
         fs.createReadStream('./src/data/interventionscitoyendo.csv')
           .pipe(csv())
           .on('data', data => {
-            // TODO: Parse date
             const {
               CATEGORIE,
               DATE,

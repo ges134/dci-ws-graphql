@@ -1,4 +1,6 @@
-const { request } = require('graphql-request');
+const {
+  request
+} = require('graphql-request');
 
 const host = process.env.API_HOST || 'http://localhost:4000';
 
@@ -32,7 +34,9 @@ const trafficLightCount = async () => {
     }
   `;
 
-  const { trafficLightCount } = await request(`${host}/`, query);
+  const {
+    trafficLightCount
+  } = await request(`${host}/`, query);
 
   const result = trafficLightCount;
 
@@ -153,7 +157,9 @@ const thatsAWholeLotOfCommutes = async () => {
     }
   `;
 
-  const { trafficLightCount } = await request(`${host}/`, query);
+  const {
+    trafficLightCount
+  } = await request(`${host}/`, query);
 
   const intersections = [];
   const count = [];
@@ -232,7 +238,9 @@ const whereDoPedestriansGo = async () => {
     }
   `;
 
-  const { trafficLightCount } = await request(`${host}/`, query);
+  const {
+    trafficLightCount
+  } = await request(`${host}/`, query);
 
   let north = 0,
     south = 0,
@@ -302,7 +310,9 @@ const trucksAndMoreTrucks = async () => {
 
     let sum = 0;
 
-    const { trafficLightCount } = await request(`${host}/`, query);
+    const {
+      trafficLightCount
+    } = await request(`${host}/`, query);
 
     trafficLightCount.forEach(e => {
       const {
@@ -394,13 +404,18 @@ const highSteaks = async () => {
     }
   `;
 
-  const { foodInspectionOffenders } = await request(`${host}/`, query);
+  const {
+    foodInspectionOffenders
+  } = await request(`${host}/`, query);
 
   const establishments = [];
   const amounts = [];
 
   foodInspectionOffenders.forEach(value => {
-    const { establishment, amount } = value;
+    const {
+      establishment,
+      amount
+    } = value;
 
     if (establishments.includes(establishment)) {
       amounts[establishments.indexOf(establishment)] += amount;
@@ -426,13 +441,17 @@ const aLotOfFines = async () => {
     }
   `;
 
-  const { foodInspectionOffenders } = await request(`${host}/`, query);
+  const {
+    foodInspectionOffenders
+  } = await request(`${host}/`, query);
 
   dates = [];
   counts = [];
 
   foodInspectionOffenders.forEach(value => {
-    const { violationDate } = value;
+    const {
+      violationDate
+    } = value;
 
     console.log(violationDate);
 
@@ -462,6 +481,9 @@ const aLotOfFines = async () => {
   console.log(average);
 };
 
+const filterYear = (crimes, year) =>
+  crimes.filter(value => new Date(value.date).getFullYear() === year);
+
 const breakdownOfCrimes = async () => {
   const query = `
     query {
@@ -472,7 +494,9 @@ const breakdownOfCrimes = async () => {
     }
   `;
 
-  const { policeIntervention } = await request(`${host}/`, query);
+  const {
+    policeIntervention
+  } = await request(`${host}/`, query);
 
   const usedCategories = [];
 
@@ -509,9 +533,6 @@ const breakdownOfCrimes = async () => {
     return category;
   };
 
-  const filterYear = (crimes, year) =>
-    crimes.filter(value => new Date(value.date).getFullYear() === year);
-
   const highest2015 = highestForYear(
     filterYear(policeIntervention, 2015),
     usedCategories
@@ -547,6 +568,48 @@ const breakdownOfCrimes = async () => {
   );
 };
 
+const whenDoTheyHappen = async () => {
+  const query = `
+  query {
+    policeIntervention {
+      date
+      shift
+    }
+  }
+`;
+
+  const {
+    policeIntervention
+  } = await request(`${host}/`, query);
+
+  const years = [2015, 2016, 2017, 2018, 2019];
+  const day = [0, 0, 0, 0, 0];
+  const evening = [0, 0, 0, 0, 0];
+  const night = [0, 0, 0, 0, 0];
+
+  for (let i = 0; i < years.length; i++) {
+    const current = filterYear(policeIntervention, years[i]);
+
+    day[i] = current.filter(value => value.shift === 'jour').length;
+    evening[i] = current.filter(value => value.shift === 'soir').length;
+    night[i] = current.filter(value => value.shift === 'nuit').length;
+  }
+
+  let stats = [];
+
+  for (let i = 0; i < years.length; i++) {
+    const max = Math.max(day[i], evening[i], night[i]);
+    const min = Math.min(day[i], evening[i], night[i]);
+
+    const shiftMax = max === day[i] ? 'jour' : max === evening[i] ? 'soir' : 'nuit';
+    const shiftMin = min === day[i] ? 'jour' : min === evening[i] ? 'soir' : 'nuit';
+
+    stats.push(`${years[i]}.${shiftMax};${shiftMin};${max-min}`);
+  }
+
+  console.log(stats.join('-'));
+};
+
 module.exports = {
   trafficLightCount,
   thatsAWholeLotOfCommutes,
@@ -554,5 +617,6 @@ module.exports = {
   trucksAndMoreTrucks,
   highSteaks,
   aLotOfFines,
-  breakdownOfCrimes
+  breakdownOfCrimes,
+  whenDoTheyHappen
 };
