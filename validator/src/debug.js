@@ -1,8 +1,8 @@
 require('dotenv').config();
 const {
-  whenDoTheyHappen
+  howLongBeforeTheJudgment
 } = require('./resolvers');
 
-whenDoTheyHappen().then(() => {
+howLongBeforeTheJudgment().then(() => {
   console.log('thou hast resolved')
 });

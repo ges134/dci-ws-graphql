@@ -481,6 +481,35 @@ const aLotOfFines = async () => {
   console.log(average);
 };
 
+const howLongBeforeTheJudgment = async () => {
+  const query = `
+    query {
+      foodInspectionOffenders {
+        violationDate
+        judgementDate
+      }
+    }
+  `;
+
+  const {
+    foodInspectionOffenders
+  } = await request(`${host}/`, query);
+
+  const differences = foodInspectionOffenders.map(element => Math.ceil((new Date(element.judgementDate) - new Date(element.violationDate)) / (1000 * 60 * 60 * 24)));
+
+  let sum = 0;
+  differences.forEach(value => {
+    sum += value
+  });
+
+  const average = Math.round(sum / differences.length);
+  const max = Math.max(...differences) - average;
+  const min = average - Math.min(...differences);
+
+  console.log(`moy:${average}-max:${max}-min:${min}`);
+}
+
+
 const filterYear = (crimes, year) =>
   crimes.filter(value => new Date(value.date).getFullYear() === year);
 
@@ -618,5 +647,6 @@ module.exports = {
   highSteaks,
   aLotOfFines,
   breakdownOfCrimes,
-  whenDoTheyHappen
+  whenDoTheyHappen,
+  howLongBeforeTheJudgment
 };
