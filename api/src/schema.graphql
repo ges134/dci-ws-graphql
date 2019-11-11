@@ -8,6 +8,7 @@ type Query {
     bankCode: Int
   ): [TrafficLight!]!
   foodInspectionOffenders: [FoodInspectionOffenders!]!
+  policeIntervention: [PoliceIntervention!]!
 }
 
 type TrafficLight {
@@ -57,4 +58,14 @@ type FoodInspectionOffenders {
   amount: Int!
   owner: String!
   city: String!
+}
+
+type PoliceIntervention {
+  category: String!
+  date: Date!
+  station: Int!
+  x: Float!
+  y: Float!
+  longitude: Float!
+  latitude: Float!
 }

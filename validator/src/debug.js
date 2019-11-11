@@ -1,8 +1,8 @@
 require('dotenv').config();
 const {
-  aLotOfFines
+  breakdownOfCrimes
 } = require('./resolvers');
 
-aLotOfFines().then(() => {
+breakdownOfCrimes().then(() => {
   console.log('thou hast resolved')
 });

@@ -1,7 +1,6 @@
 const Query = require('./resolvers/Query');
 const {
-  parseAmount,
-  toDate
+  parseAmount
 } = require('./helpers');
 
 const {
@@ -15,22 +14,15 @@ console.log('setting dependencies...');
 moment.locale('fr-ca');
 console.log(moment.locale());
 
-console.log('dependencies set!')
+console.log('dependencies set!');
 
 console.log('reading csv files...');
 
 console.log('loading traffic light count data...');
 const trafficLightData = [];
-let loggedData = false;
 fs.createReadStream('./src/data/comptage-feux-2014-2018.csv')
   .pipe(csv())
-  .on('data', (data) => {
-    if (!loggedData) {
-      console.log('Here is a sample data for traffic light count');
-      console.log(data);
-      loggedData = true;
-    }
-
+  .on('data', data => {
     const {
       Id_Reference,
       Id_Intersection,
@@ -110,27 +102,25 @@ fs.createReadStream('./src/data/comptage-feux-2014-2018.csv')
 
     console.log('reading into food inspection offenders...');
     const foodInspectionOffenders = [];
-    loggedData = false;
 
     fs.createReadStream('./src/data/inspection-aliments-contrevenants.csv')
-      .pipe(csv({
-        separator: ';'
-      }))
+      .pipe(
+        csv({
+          separator: ';'
+        })
+      )
       .on('data', data => {
-        if (!loggedData) {
-          console.log('Here is a sample data for food inspection offenders!');
-          console.log(data);
-          loggedData = true;
-        }
-
-        const violationDate = moment(data['/contrevenant/date_infraction'], 'DD MMMM YYYY').toDate();
-        console.log(violationDate);
-
         foodInspectionOffenders.push({
           address: data['/contrevenant/addresse'],
           category: data['/contrevenant/categorie'],
-          violationDate: moment(data['/contrevenant/date_infraction'], 'DD MMMM YYYY').toDate(),
-          judgementDate: moment(data['/contrevenant/date_jugement'], 'DD MMMM YYYY').toDate(),
+          violationDate: moment(
+            data['/contrevenant/date_infraction'],
+            'DD MMMM YYYY'
+          ).toDate(),
+          judgementDate: moment(
+            data['/contrevenant/date_jugement'],
+            'DD MMMM YYYY'
+          ).toDate(),
           description: data['/contrevenant/description'],
           establishment: data['/contrevenant/etablissement'],
           amount: parseAmount(data['/contrevenant/montant']),
@@ -142,23 +132,57 @@ fs.createReadStream('./src/data/comptage-feux-2014-2018.csv')
         console.log('read food inspection offenders data data!');
         console.log(`${foodInspectionOffenders.length} entries were read`);
 
-        console.log('read all csv files!');
+        console.log('reading police interventions...');
+        const policeIntervention = [];
 
-        console.log('starting graphQL server...');
-        const resolvers = {
-          Query
-        };
+        fs.createReadStream('./src/data/interventionscitoyendo.csv')
+          .pipe(csv())
+          .on('data', data => {
+            // TODO: Parse date
+            const {
+              CATEGORIE,
+              DATE,
+              QUART,
+              PDQ,
+              X,
+              Y,
+              LONGITUDE,
+              LATITUDE
+            } = data;
 
-        const server = new GraphQLServer({
-          typeDefs: './src/schema.graphql',
-          resolvers,
-          context: request => ({
-            ...request,
-            trafficLightData,
-            foodInspectionOffenders,
-          })
-        });
+            policeIntervention.push({
+              category: CATEGORIE,
+              date: moment(DATE, 'YYYY-MM-DD').toDate(),
+              shift: QUART,
+              station: parseInt(PDQ),
+              x: parseFloat(X),
+              y: parseFloat(Y),
+              longitude: parseFloat(LONGITUDE),
+              latitude: parseFloat(LATITUDE)
+            });
+          }).on('end', () => {
+            console.log(policeIntervention[0]);
+            console.log('read all csv files!');
 
-        server.start(() => console.log('Server is running on http://localhost:4000'));
+            console.log('starting graphQL server...');
+            const resolvers = {
+              Query
+            };
+
+            const server = new GraphQLServer({
+              typeDefs: './src/schema.graphql',
+              resolvers,
+              context: request => ({
+                ...request,
+                trafficLightData,
+                foodInspectionOffenders,
+                policeIntervention
+              })
+            });
+
+            server.start(() =>
+              console.log('Server is running on http://localhost:4000')
+            );
+          });
       });
   });
