@@ -1,0 +1,444 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>DCI Workshop - GraphQL</title>
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/moon.css">
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section>
+				<h1>GraphQL</h1>
+				<p>Une façon intéressante d'interroger une API!</p>
+			</section>
+			<section>
+				<section>
+					<h2>Plan de la présentation</h2>
+					<ul>
+						<li class="fragment">Qu'est-ce que GraphQL?</li>
+						<li class="fragment">Comment ça fonctionne?</li>
+						<li class="fragment">Comment l'implémenter avec NodeJS?</li>
+						<li class="fragment">C'est quoi l'atelier?</li>
+					</ul>
+				</section>
+				<section>
+					<h2>whoami</h2>
+					<ul>
+						<li class="fragment">Jessy Anglehart-Nunes (Mélo)</li>
+						<li class="fragment">Je fais beaucoup de web</li>
+						<li class="fragment">Je suis VP des communications de la DCI</li>
+						<li class="fragment">J'aime participer à des compétitions</li>
+					</ul>
+				</section>
+			</section>
+			<section>
+				<section>
+					<h4>GraphQL, c'est quoi?</h4>
+					<ul>
+						<li class="fragment">Une API open-source developpée par Facebook</li>
+						<li class="fragment">Technologie qui permet de déclarer ce qu'on veut chercher</li>
+						<li class="fragment">Répond à des requêtes sur un seul endpoint</li>
+						<li class="fragment">Indépendent des langages de programmation</li>
+						<li class="fragment">Utilise son propre langage de définition, le Standard Definition Language (SDL)</li>
+					</ul>
+					<aside class="notes">
+						Sommairement, GraphQL est une spécification qui indique comment la technologie devrait fonctionner.
+						Elle indique comment préciser les types de données qui existent au sein de notre API et comment un client peut aller les chercher.
+						Le tout est fait dans un seul endpoint qui reçoit les requêtes et qui envoie les réponses, d'où le fait que c'est un langage d'interrogation de données.
+						La majeure partie de la spécification de GraphQL se fait avec le SDL. En comprenant le SDL, on comprend comment fonctionne GraphQL.
+					</aside>
+				</section>
+				<section>
+					<h4>GraphQL vs REST</h4>
+					<ul>
+						<li class="fragment">Rest permet d'avoir des serveurs sans états</li>
+						<li class="fragment">Rest permet d'avoir un accès structuré aux ressources, mais celle-ci est rigide</li>
+						<li class="fragment">Rest doit avoir plusieurs endpoints pour faire de l'interrogation de données</li>
+						<li class="fragment">Il faut un plus grand temps de développement pour faire plusieurs endpoints.</li>
+					</ul>
+					<p class="fragment">
+						En bref, on est pressé et GraphQL permet d'aller plus rapidement. GraphQL, avec son seul endpoint, permet de développer plus rapidement.
+					</p>
+					<aside class="notes">
+							REST permet d'avoir des serveurs sans avoir d'état, ce qui peut être pratique.
+							Son accès aux ressources est structuré, ce qui facilite la maintenance d'une application.
+							Cependant, REST fonctionne avec des routes et endpoints (p. ex.: /stats/avg-speed), ce qui fait de lui une structure rigide.
+							Cette rigidité fait en sorte qui a plus d'endpoints à implémenter dans le but d'obtenir des données.
+							Ça augmente les efforts de développements pour les implémenter.
+							Les développeurs front-ends peuvent donc être pris à attendre avant d'avoir de nouvelles fonctionnalités.
+							Puis aujourd'hui, on veut développer rapidement des fonctionnalités, ce qui fait que REST peut être une solution désuète.
+							GraphQL en contrepartie permet d'avoir un accès structuré, mais donne la liberté aux clients d'interroger les données.
+							Ainsi, GraphQL indique quelles données un client peut interroger et le client interroge celle-ci.
+							Il y a beaucoup plus de flexibilités ce qui accélère le processus de développement.	
+					</aside>
+				</section>
+				<section>
+					<h4>De quel moyen peut-on l'utiliser?</h4>
+					<p>GraphQL peut:</p>
+					<ul>
+						<li class="fragment">Être connecté à une base de données.</li>
+						<li class="fragment">Être un intermédiaire à d'autres services.</li>
+						<li class="fragment">Ou être une approche hybride.</li>
+					</ul>
+					<aside class="notes">
+						GraphQL peut être connecté à une base de données, ce qui couvre le cas typique d'une personne qui commence une nouvelle application.
+						Or, la réalité se rapproche beaucoup plus au second moyen. En général, une personne est prise avec plusieurs systèmes, dont certains sont "legacy".
+						Ainsi, il est possible d'implémenter GraphQL pour éviter d'aller chercher tous dans les systèmes.
+						Bien évidemment, il est possible de mélanger les deux.
+					</aside>
+				</section>
+			</section>
+			<section>
+				<section>
+					<h4>Les principes de GraphQL - SDL</h4>
+					<p class="fragment">SDL, pour Standard Definition Language, permet de définir le schéma d'une API GraphQL.</p>
+					<p class="fragment">On consigne ce schéma dans un fichier nommé schema.graphql.</p>
+					<aside class="notes">
+						Tout passe par le Standard Definition Language, qui est consigné dans le fichier schema.graphql.
+						Le schéma peut être vu comme une sorte d'engagement de la part d'un serveur où celui-ci s'engage à fournir ces données.
+					</aside>
+				</section>
+				<section>
+					<h4>SDL, ça ressemble à ça</h4>
+					<pre>
+						<code class="hljs" data-line-numbers>type Person {
+  Name: String!
+  Age: Int!
+}
+						</code>
+					</pre>
+					<aside class="notes">
+						Cet exemple définit un type nommé personne pour lequel on y retrouve deux propriétés: nom et âge.
+						Le nom est une chaîne de caractère et l'âge est un entier.
+						Le point d'interrogation indique que cette information sera toujours présente lorsqu'on reçoit une personne.	
+					</aside>
+				</section>
+				<section>
+					<h4>Introduction des propriétés du SDL</h4>
+					<ul>
+						<li class="fragment">supporte ces types primitifs, dit scalaires : String, Int, Float, Boolean, ID</li>
+						<li class="fragment">
+							Les implémentations de GraphQL permet de supporter d'autres scalaires. On retrouve souvent Date
+						</li>
+						<li class="fragment">On peut aussi préciser des énumérations avec le mot de clé enum</li>
+						<li class="fragment">
+							Les listes peuvent être spécifiés en utilisant []. Ainsi, [Int] signifie une liste d'Int
+						</li>
+						<li class="fragment">! permet d'indiquer qu'une propriété est non-nulle. Peut s'appliquer aux listes</li>
+						<li class="fragment">GraphQL permet aussi de joindre plusieurs types, des interfaces et bien plus.</li>
+					</ul>
+					<aside class="notes">
+						Les données de bases sont scalaires. GraphQL précise qu'on doit minimalement implémenter: String, Int, Float, Boolean et ID.
+						ID est un type de donnée autogénéré. Son équivalent en SQL serait une primary key automatiquement généré.
+						Les ID sont des hash.
+						Les autres scalaires sont libres d'être implémentés selon les librairies. La plupart implémentent les dates.
+						GraphQL support les énumérations, il suffit de remplacer type par enum et d'y insérer les valeurs.
+						Si un type est entouré de [], ceci devient une liste.
+						Le point d'exclamation indique qu'une propriété est non nulle. Elle peut s'appliquer sur une propriété, sur une liste et sur le contenu d'une liste.
+						Par exemple [Int!]! signifierait une liste non nulle pour lequel ses éléments sont également non-nul.
+						Cette diapositive couvre seulement la base. La documentation de GraphQL permet de voir les interfaces et les types union.	
+					</aside>
+				</section>
+				<section>
+					<h4>Autres propriétés intéressantes</h4>
+					<p>GraphQL permet de "nester" des requêtes. Par exemple:</p>
+					<pre>
+							<code class="hljs" data-line-numbers>query {
+  allPersons {
+    name
+    age
+    posts {
+      title
+    }
+  }
+}
+							</code>
+						</pre>
+					<p class="fragment">Ce qui nous permet d'aller chercher des données sans lancer une nouvelle requête.</p>
+					<aside class="notes">
+						Ceci permet d'éviter les problèmes N+1 où je dois faire une requête pour chercher une entité et N requêtes pour chercher les N entités liées.
+						Par exemple, ici, dans une API classique, j'aurais l'id de tous les posts faits par une personne.
+						Il faudrait donc que j'exécute N requêtes pour aller chercher les posts.
+						Par contre, avec GraphQL, je peux "nester" la requête et j'évite ainsi le problème N+1.
+					</aside>
+				</section>
+				<section>
+					<h4>Les trois types dit "racine"</h4>
+					<p class="fragment">GraphQL a trois types enregistré pour ses opérations.</p>
+					<ul>
+						<li class="fragment">Query: permet d'interroger des données</li>
+						<li class="fragment">Mutation: permet de modifier des données</li>
+						<li class="fragment">Subscription: permet de s'inscrire à des données en temps réel</li>
+					</ul>
+					<p class="fragment">Chacun des types accepte des paramètres permettant de moduler notre requête.</p>
+				</section>
+				<aside class="notes">
+					Ces trois types permettent d'interagir avec GraphQL.
+					En effet, lorsqu'on effectue une requête, on fait soit une Query, une Mutation ou une Subscription.
+					On utilise le résultat des requêtes pour sélectionner les données qu'on veut aller chercher.
+					Les diapos suivantes montrent des exemples.
+				</aside>
+				<section>
+					<h4>Exemples - Query</h4>
+					<pre>
+						<code class="hljs" data-line-numbers>type Query {
+  info: String!
+  feed(filter: String, skip: Int, first: Int): Feed!
+}						
+						</code>
+					</pre>
+				</section>
+				<section>
+					<h4>Exemples - Mutation</h4>
+					<pre>
+						<code class="hljs" data-line-numbers>type Mutation {
+  post(url: String!, description: String!): Link!
+  login(email: String!, password: String!): AuthPayload
+  vote(linkId: ID!): Vote
+}				
+						</code>
+					</pre>
+				</section>
+				<section>
+					<h4>Exemples - Subscription</h4>
+					<pre>
+						<code class="hljs" data-line-numbers>type Subscription {
+  messageAdded(channelId: ID!): Message
+}		
+						</code>
+					</pre>
+				</section>
+			</section>
+			<section>
+				<section>
+						<h4>L'implémentation</h4>
+						<p class="fragment">
+							Avant d'entrer dans les détails d'implémentation, il y a quelques concepts à couvrir.
+						</p>
+				</section>
+				<section>
+					<h4>Les Resolvers</h4>
+					<p class="fragment">Chaque champ dans un schéma GraphQL est aussi considéré un Resolver.</p>
+					<p class="fragment">Chaque Resolver indique comment GraphQL doit aller récupérer les données dudit champ.</p>
+					<p class="fragment">Ainsi, l'implémentation consiste à implémenter les resolvers.</p>
+					<p class="fragment">Heureusement, les librairies implémentent une grosse partie du travail.</p>
+				</section>
+				<section>
+					<h4>Avec nodeJS, qu'est-ce qu'il nous faut?</h4>
+					<p class="fragment">Pour faire la base, sans gestion des données, il nous faut les dépendences suivantes.</p>
+					<ul class="fragment">
+						<li>graphql</li>
+						<li>graphql-yoga</li>
+					</ul>
+					<p class="fragment">Pour gérer une base de données, je recommande également</p>
+					<ul class="fragment">
+						<li>prisma</li>
+					</ul>
+					<p class="fragment">Pour faire des requêtes à un autre service graphQL, je recommande également</p>
+					<ul class="fragment">
+						<li>graphql-request</li>
+					</ul>
+				</section>
+				<section>
+					<h4>Implémenter des Resolvers</h4>
+					<p class="fragment">Un Resolver est une méthode qui prend quatre paramètres:</p>
+					<ul>
+						<li class="fragment">parent: Le résultat d'un Resolver parent.</li>
+						<li class="fragment">args: Les arguments de la requête.</li>
+						<li class="fragment">context: Toute information contextuelle qui est partagée entre toutes les requêtes.</li>
+						<li class="fragment">info: information spécifique du champ en lien avec la requête courante et les détails du schéma.</li>
+					</ul>
+					<aside class="notes">
+						Les quatre paramètres permettent d'avoir toute l'information nécessaire pour accomplir une requête.
+						Les requêtes peuvent s'exécuter dans une sorte de chaîne et le parent garde le résultat de la dernière requête.
+						Les parents deviennent intéressants dans un contexte où les entités sont liées, car il est possible d'aller chercher d'autres entités avec le parent.
+						Par exemple, si je veux l'utilisateur qui a publié un certain post, le id du parent devient intéressant pour aller chercher ledit user.
+						Les arguments prennent en compte les arguments qu'a passés un client à notre serveur graphQL.
+						Le contexte donne toute information contextuelle.
+						Le contexte est partagé entre toutes les requêtes.
+						On peut rajouter des objets au contexte afin de les réutiliser plus tard.
+						Enfin, info permet d'avoir certaines informations permettant entre autres de faire de la réflexion.	
+					</aside>
+				</section>
+				<section>
+					<h4>Et ça ressemble à quoi?</h4>
+					<pre>
+							<code class="hljs" data-line-numbers>const trafficLightCount = (root, args, context, info) => {
+  const {
+    intersection,
+    beginHour,
+    endHour,
+    bankCode
+  } = args;
+  let results = context.trafficLightData.slice(0);
+  if (intersection) {
+    results = results.filter(value => value.intersectionName === intersection);
+  }
+  if (beginHour || endHour) {
+    const filterBeginHour = beginHour || 0;
+    const filterEndHour = endHour || 23;
+    results = results.filter(value => value.hour > filterBeginHour && value.hour < filterEndHour);
+  }
+  if (bankCode) {
+    results = results.filter(value => value.bankCode === bankCode);
+  }
+
+  return results;
+};
+							</code>
+						</pre>
+						<aside class="notes">
+							Dans mon schéma, supposons que j'aille une requête nommée trafficLightCount.
+							Ici, on a quatre paramètres: intersection, beginHour, endHour, bankCode.
+							Ces paramètres, lorsque spécifiés, permettent de filtrer la liste que j'ai copiée.
+							Le code vérifie donc que les paramètres sont spécifiés et filtre selon les critères.	
+						</aside>
+				</section>
+				<section>
+					<h4>Et la structure d'un projet, elle ressemble à quoi?</h4>
+					<ul class="fragment">
+						<li>node_modules/</li>
+						<li>src/</li>
+						<ul>
+							<li>resolvers/</li>
+							<ul>
+								<li>Query.js</li>
+								<li>Mutation.js</li>
+								<li>Susbscription.js</li>
+								<li>Tout autre fichier pour les autres types. Les fichiers doivent débuter avec une majuscule.</li>
+							</ul>
+							<li>index.js</li>
+						</ul>
+						<li>package.json</li>
+						<li>package-lock.json (ou yarn.lock)</li>
+					</ul>
+					<aside class="notes">
+						node_modules/ permet de contenir les dépendances d'un projet.
+						Lorsqu'on installe un paquet avec npm ou yarn, celui-ci se retrouve dans ce dossier.
+						package.json permet de spécifier de l'information sur notre projet et nos dépendances.
+						package-lock.json (ou yarn.lock si on utilise Yarn) consigne de l'information dans le but de résoudre les dépendances.
+						Le fichier est généralement géré par le gestionnaire de paquet, mais doit tout de même être partagé entre les développeur.e.s d'un projet.
+						src/ contient généralement le code source.
+						À l'intérieur, on y retrouve index.js, qui est le script d'entrée de l'application (un peu comme un main()).
+						Les Resolvers sont généralement consignés dans le dossier avec le même nom.
+						On met un fichier par type.	
+					</aside>
+				</section>
+				<section>
+					<h4>le fichier src/index.js</h4>
+					<p class="fragment">Principales responsabilités:</p>
+					<ul>
+						<li class="fragment">Mettre en place certaines dépendances</li>
+						<li class="fragment">Effectuer du traitement au démarrage</li>
+						<li class="fragment">Mettre en place le serveur GraphQL. Il faut...</li>
+						<ul>
+								<li class="fragment">indiquer l'emplacement du schéma</li>
+								<li class="fragment">indiquer les différents resolver</li>
+								<li class="fragment">attacher des données au contexte</li>
+						</ul>
+					</ul>
+				</section>
+				<section>
+					<h4>À quoi peut ressembler le code source</h4>
+					<pre>
+							<code class="hljs" data-line-numbers>const resolvers = {
+  Query
+};
+
+const server = new GraphQLServer({
+  typeDefs: './src/schema.graphql',
+  resolvers,
+  context: request => ({
+    ...request,
+    trafficLightData,
+    foodInspectionOffenders,
+    policeIntervention
+  })
+});
+
+server.start(() =>
+  console.log('Server is running on http://localhost:4000')
+);
+							</code>
+						</pre>
+				</section>
+			</section>
+			<section>
+				<h4>La partie pratique</h4>
+				<p class="fragment">
+					Vous aurez à monter une API GraphQL qui interroge une API GraphQL. Cette API contient trois ensembles de données provenant de la ville de Montréal.
+				</p>
+				<p class="fragment">
+					Il y a 12 défis à résoudre, chacun des défis vous demandera d'implémenter des resolvers et de répondre à une question précise.
+				</p>
+				<p class="fragment">Je vous fournis un starter pack également!</p>
+			</section>
+			<section>
+				<h4>Références</h4>
+				<ul>
+					<li>
+						<a href="https://www.howtographql.com/">
+							Tutoriel de GraphQL.
+						</a>
+					</li>
+					<li>
+						<a href="https://blog.apollographql.com/tutorial-graphql-subscriptions-server-side-e51c32dc2951">Exemple de schéma de subscriptions</a>
+					</li>
+					<li>
+						<a href="https://graphql.org/learn/execution/">
+							Un peu plus d'information sur les paramètres.
+						</a>
+					</li>
+					<li>
+						<a href="https://graphql.org/graphql-js/type/#graphqlobjecttype">
+							Comprendre l'argument info
+						</a>
+					</li>
+				</ul>
+			</section>
+		</div>
+	</div>
+
+	<script src="js/reveal.js"></script>
+
+	<script>
+		// More info about config & dependencies:
+		// - https://github.com/hakimel/reveal.js#configuration
+		// - https://github.com/hakimel/reveal.js#dependencies
+		Reveal.initialize({
+			dependencies: [{
+					src: 'plugin/markdown/marked.js'
+				},
+				{
+					src: 'plugin/markdown/markdown.js'
+				},
+				{
+					src: 'plugin/notes/notes.js',
+					async: true
+				},
+				{
+					src: 'plugin/highlight/highlight.js',
+					async: true
+				}
+			]
+		});
+	</script>
+</body>
+
+</html>

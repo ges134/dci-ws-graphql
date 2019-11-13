@@ -6,7 +6,7 @@ const trafficLightCount = (root, args, context, info) => {
     endHour,
     bankCode
   } = args;
-  let results = context.trafficLightData;
+  let results = context.trafficLightData.slice(0);
   if (intersection) {
     results = results.filter(value => value.intersectionName === intersection);
   }

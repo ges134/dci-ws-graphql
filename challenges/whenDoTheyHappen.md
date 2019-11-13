@@ -2,7 +2,7 @@
 
 ## Question
 
-Pour chaque année (2015 à 2019), indiquez le moment quart où il y a eu le plus d'interventions policières et le quart où il y en a eu le moins. Indiquez également la différence.
+Pour chaque année (2015 à 2019), indiquez le quart où il y a eu le plus d'interventions policières et le quart où il y en a eu le moins. Indiquez également la différence entre les deux.
 
 ## Format de la réponse
 
