@@ -59,9 +59,12 @@
 					</ul>
 					<aside class="notes">
 						Sommairement, GraphQL est une spécification qui indique comment la technologie devrait fonctionner.
-						Elle indique comment préciser les types de données qui existent au sein de notre API et comment un client peut aller les chercher.
-						Le tout est fait dans un seul endpoint qui reçoit les requêtes et qui envoie les réponses, d'où le fait que c'est un langage d'interrogation de données.
-						La majeure partie de la spécification de GraphQL se fait avec le SDL. En comprenant le SDL, on comprend comment fonctionne GraphQL.
+						Elle indique comment préciser les types de données qui existent au sein de notre API et comment un client
+						peut aller les chercher.
+						Le tout est fait dans un seul endpoint qui reçoit les requêtes et qui envoie les réponses, d'où le fait que
+						c'est un langage d'interrogation de données.
+						La majeure partie de la spécification de GraphQL se fait avec le SDL. En comprenant le SDL, on comprend
+						comment fonctionne GraphQL.
 					</aside>
 				</section>
 				<section>
@@ -73,19 +76,23 @@
 						<li class="fragment">Il faut un plus grand temps de développement pour faire plusieurs endpoints.</li>
 					</ul>
 					<p class="fragment">
-						En bref, on est pressé et GraphQL permet d'aller plus rapidement. GraphQL, avec son seul endpoint, permet de développer plus rapidement.
+						En bref, on est pressé et GraphQL permet d'aller plus rapidement. GraphQL, avec son seul endpoint, permet de
+						développer plus rapidement.
 					</p>
 					<aside class="notes">
-							REST permet d'avoir des serveurs sans avoir d'état, ce qui peut être pratique.
-							Son accès aux ressources est structuré, ce qui facilite la maintenance d'une application.
-							Cependant, REST fonctionne avec des routes et endpoints (p. ex.: /stats/avg-speed), ce qui fait de lui une structure rigide.
-							Cette rigidité fait en sorte qui a plus d'endpoints à implémenter dans le but d'obtenir des données.
-							Ça augmente les efforts de développements pour les implémenter.
-							Les développeurs front-ends peuvent donc être pris à attendre avant d'avoir de nouvelles fonctionnalités.
-							Puis aujourd'hui, on veut développer rapidement des fonctionnalités, ce qui fait que REST peut être une solution désuète.
-							GraphQL en contrepartie permet d'avoir un accès structuré, mais donne la liberté aux clients d'interroger les données.
-							Ainsi, GraphQL indique quelles données un client peut interroger et le client interroge celle-ci.
-							Il y a beaucoup plus de flexibilités ce qui accélère le processus de développement.	
+						REST permet d'avoir des serveurs sans avoir d'état, ce qui peut être pratique.
+						Son accès aux ressources est structuré, ce qui facilite la maintenance d'une application.
+						Cependant, REST fonctionne avec des routes et endpoints (p. ex.: /stats/avg-speed), ce qui fait de lui une
+						structure rigide.
+						Cette rigidité fait en sorte qui a plus d'endpoints à implémenter dans le but d'obtenir des données.
+						Ça augmente les efforts de développements pour les implémenter.
+						Les développeurs front-ends peuvent donc être pris à attendre avant d'avoir de nouvelles fonctionnalités.
+						Puis aujourd'hui, on veut développer rapidement des fonctionnalités, ce qui fait que REST peut être une
+						solution désuète.
+						GraphQL en contrepartie permet d'avoir un accès structuré, mais donne la liberté aux clients d'interroger
+						les données.
+						Ainsi, GraphQL indique quelles données un client peut interroger et le client interroge celle-ci.
+						Il y a beaucoup plus de flexibilités ce qui accélère le processus de développement.
 					</aside>
 				</section>
 				<section>
@@ -97,8 +104,10 @@
 						<li class="fragment">Ou être une approche hybride.</li>
 					</ul>
 					<aside class="notes">
-						GraphQL peut être connecté à une base de données, ce qui couvre le cas typique d'une personne qui commence une nouvelle application.
-						Or, la réalité se rapproche beaucoup plus au second moyen. En général, une personne est prise avec plusieurs systèmes, dont certains sont "legacy".
+						GraphQL peut être connecté à une base de données, ce qui couvre le cas typique d'une personne qui commence
+						une nouvelle application.
+						Or, la réalité se rapproche beaucoup plus au second moyen. En général, une personne est prise avec plusieurs
+						systèmes, dont certains sont "legacy".
 						Ainsi, il est possible d'implémenter GraphQL pour éviter d'aller chercher tous dans les systèmes.
 						Bien évidemment, il est possible de mélanger les deux.
 					</aside>
@@ -111,7 +120,8 @@
 					<p class="fragment">On consigne ce schéma dans un fichier nommé schema.graphql.</p>
 					<aside class="notes">
 						Tout passe par le Standard Definition Language, qui est consigné dans le fichier schema.graphql.
-						Le schéma peut être vu comme une sorte d'engagement de la part d'un serveur où celui-ci s'engage à fournir ces données.
+						Le schéma peut être vu comme une sorte d'engagement de la part d'un serveur où celui-ci s'engage à fournir
+						ces données.
 					</aside>
 				</section>
 				<section>
@@ -126,7 +136,7 @@
 					<aside class="notes">
 						Cet exemple définit un type nommé personne pour lequel on y retrouve deux propriétés: nom et âge.
 						Le nom est une chaîne de caractère et l'âge est un entier.
-						Le point d'interrogation indique que cette information sera toujours présente lorsqu'on reçoit une personne.	
+						Le point d'interrogation indique que cette information sera toujours présente lorsqu'on reçoit une personne.
 					</aside>
 				</section>
 				<section>
@@ -141,18 +151,23 @@
 							Les listes peuvent être spécifiés en utilisant []. Ainsi, [Int] signifie une liste d'Int
 						</li>
 						<li class="fragment">! permet d'indiquer qu'une propriété est non-nulle. Peut s'appliquer aux listes</li>
-						<li class="fragment">GraphQL permet aussi de joindre plusieurs types, des interfaces et bien plus.</li>
+						<li class="fragment">
+							GraphQL permet aussi de joindre plusieurs types, des interfaces, des fragments et bien plus.
+						</li>
 					</ul>
 					<aside class="notes">
-						Les données de bases sont scalaires. GraphQL précise qu'on doit minimalement implémenter: String, Int, Float, Boolean et ID.
+						Les données de bases sont scalaires. GraphQL précise qu'on doit minimalement implémenter: String, Int,
+						Float, Boolean et ID.
 						ID est un type de donnée autogénéré. Son équivalent en SQL serait une primary key automatiquement généré.
 						Les ID sont des hash.
 						Les autres scalaires sont libres d'être implémentés selon les librairies. La plupart implémentent les dates.
 						GraphQL support les énumérations, il suffit de remplacer type par enum et d'y insérer les valeurs.
 						Si un type est entouré de [], ceci devient une liste.
-						Le point d'exclamation indique qu'une propriété est non nulle. Elle peut s'appliquer sur une propriété, sur une liste et sur le contenu d'une liste.
+						Le point d'exclamation indique qu'une propriété est non nulle. Elle peut s'appliquer sur une propriété, sur
+						une liste et sur le contenu d'une liste.
 						Par exemple [Int!]! signifierait une liste non nulle pour lequel ses éléments sont également non-nul.
-						Cette diapositive couvre seulement la base. La documentation de GraphQL permet de voir les interfaces et les types union.	
+						Cette diapositive couvre seulement la base. La documentation de GraphQL permet de voir les interfaces et les
+						types union.
 					</aside>
 				</section>
 				<section>
@@ -172,7 +187,8 @@
 						</pre>
 					<p class="fragment">Ce qui nous permet d'aller chercher des données sans lancer une nouvelle requête.</p>
 					<aside class="notes">
-						Ceci permet d'éviter les problèmes N+1 où je dois faire une requête pour chercher une entité et N requêtes pour chercher les N entités liées.
+						Ceci permet d'éviter les problèmes N+1 où je dois faire une requête pour chercher une entité et N requêtes
+						pour chercher les N entités liées.
 						Par exemple, ici, dans une API classique, j'aurais l'id de tous les posts faits par une personne.
 						Il faudrait donc que j'exécute N requêtes pour aller chercher les posts.
 						Par contre, avec GraphQL, je peux "nester" la requête et j'évite ainsi le problème N+1.
@@ -227,10 +243,10 @@
 			</section>
 			<section>
 				<section>
-						<h4>L'implémentation</h4>
-						<p class="fragment">
-							Avant d'entrer dans les détails d'implémentation, il y a quelques concepts à couvrir.
-						</p>
+					<h4>L'implémentation</h4>
+					<p class="fragment">
+						Avant d'entrer dans les détails d'implémentation, il y a quelques concepts à couvrir.
+					</p>
 				</section>
 				<section>
 					<h4>Les Resolvers</h4>
@@ -261,19 +277,24 @@
 					<ul>
 						<li class="fragment">parent: Le résultat d'un Resolver parent.</li>
 						<li class="fragment">args: Les arguments de la requête.</li>
-						<li class="fragment">context: Toute information contextuelle qui est partagée entre toutes les requêtes.</li>
-						<li class="fragment">info: information spécifique du champ en lien avec la requête courante et les détails du schéma.</li>
+						<li class="fragment">context: Toute information contextuelle qui est partagée entre toutes les requêtes.
+						</li>
+						<li class="fragment">info: information spécifique du champ en lien avec la requête courante et les détails
+							du schéma.</li>
 					</ul>
 					<aside class="notes">
 						Les quatre paramètres permettent d'avoir toute l'information nécessaire pour accomplir une requête.
-						Les requêtes peuvent s'exécuter dans une sorte de chaîne et le parent garde le résultat de la dernière requête.
-						Les parents deviennent intéressants dans un contexte où les entités sont liées, car il est possible d'aller chercher d'autres entités avec le parent.
-						Par exemple, si je veux l'utilisateur qui a publié un certain post, le id du parent devient intéressant pour aller chercher ledit user.
+						Les requêtes peuvent s'exécuter dans une sorte de chaîne et le parent garde le résultat de la dernière
+						requête.
+						Les parents deviennent intéressants dans un contexte où les entités sont liées, car il est possible d'aller
+						chercher d'autres entités avec le parent.
+						Par exemple, si je veux l'utilisateur qui a publié un certain post, le id du parent devient intéressant pour
+						aller chercher ledit user.
 						Les arguments prennent en compte les arguments qu'a passés un client à notre serveur graphQL.
 						Le contexte donne toute information contextuelle.
 						Le contexte est partagé entre toutes les requêtes.
 						On peut rajouter des objets au contexte afin de les réutiliser plus tard.
-						Enfin, info permet d'avoir certaines informations permettant entre autres de faire de la réflexion.	
+						Enfin, info permet d'avoir certaines informations permettant entre autres de faire de la réflexion.
 					</aside>
 				</section>
 				<section>
@@ -303,12 +324,12 @@
 };
 							</code>
 						</pre>
-						<aside class="notes">
-							Dans mon schéma, supposons que j'aille une requête nommée trafficLightCount.
-							Ici, on a quatre paramètres: intersection, beginHour, endHour, bankCode.
-							Ces paramètres, lorsque spécifiés, permettent de filtrer la liste que j'ai copiée.
-							Le code vérifie donc que les paramètres sont spécifiés et filtre selon les critères.	
-						</aside>
+					<aside class="notes">
+						Dans mon schéma, supposons que j'aille une requête nommée trafficLightCount.
+						Ici, on a quatre paramètres: intersection, beginHour, endHour, bankCode.
+						Ces paramètres, lorsque spécifiés, permettent de filtrer la liste que j'ai copiée.
+						Le code vérifie donc que les paramètres sont spécifiés et filtre selon les critères.
+					</aside>
 				</section>
 				<section>
 					<h4>Et la structure d'un projet, elle ressemble à quoi?</h4>
@@ -332,12 +353,14 @@
 						node_modules/ permet de contenir les dépendances d'un projet.
 						Lorsqu'on installe un paquet avec npm ou yarn, celui-ci se retrouve dans ce dossier.
 						package.json permet de spécifier de l'information sur notre projet et nos dépendances.
-						package-lock.json (ou yarn.lock si on utilise Yarn) consigne de l'information dans le but de résoudre les dépendances.
-						Le fichier est généralement géré par le gestionnaire de paquet, mais doit tout de même être partagé entre les développeur.e.s d'un projet.
+						package-lock.json (ou yarn.lock si on utilise Yarn) consigne de l'information dans le but de résoudre les
+						dépendances.
+						Le fichier est généralement géré par le gestionnaire de paquet, mais doit tout de même être partagé entre
+						les développeur.e.s d'un projet.
 						src/ contient généralement le code source.
 						À l'intérieur, on y retrouve index.js, qui est le script d'entrée de l'application (un peu comme un main()).
 						Les Resolvers sont généralement consignés dans le dossier avec le même nom.
-						On met un fichier par type.	
+						On met un fichier par type.
 					</aside>
 				</section>
 				<section>
@@ -348,9 +371,9 @@
 						<li class="fragment">Effectuer du traitement au démarrage</li>
 						<li class="fragment">Mettre en place le serveur GraphQL. Il faut...</li>
 						<ul>
-								<li class="fragment">indiquer l'emplacement du schéma</li>
-								<li class="fragment">indiquer les différents resolver</li>
-								<li class="fragment">attacher des données au contexte</li>
+							<li class="fragment">indiquer l'emplacement du schéma</li>
+							<li class="fragment">indiquer les différents resolver</li>
+							<li class="fragment">attacher des données au contexte</li>
 						</ul>
 					</ul>
 				</section>
@@ -382,10 +405,12 @@ server.start(() =>
 			<section>
 				<h4>La partie pratique</h4>
 				<p class="fragment">
-					Vous aurez à monter une API GraphQL qui interroge une API GraphQL. Cette API contient trois ensembles de données provenant de la ville de Montréal.
+					Vous aurez à monter une API GraphQL qui interroge une API GraphQL. Cette API contient trois ensembles de
+					données provenant de la ville de Montréal.
 				</p>
 				<p class="fragment">
-					Il y a 12 défis à résoudre, chacun des défis vous demandera d'implémenter des resolvers et de répondre à une question précise.
+					Il y a 12 défis à résoudre, chacun des défis vous demandera d'implémenter des resolvers et de répondre à une
+					question précise.
 				</p>
 				<p class="fragment">Je vous fournis un starter pack également!</p>
 			</section>
@@ -398,7 +423,8 @@ server.start(() =>
 						</a>
 					</li>
 					<li>
-						<a href="https://blog.apollographql.com/tutorial-graphql-subscriptions-server-side-e51c32dc2951">Exemple de schéma de subscriptions</a>
+						<a href="https://blog.apollographql.com/tutorial-graphql-subscriptions-server-side-e51c32dc2951">Exemple de
+							schéma de subscriptions</a>
 					</li>
 					<li>
 						<a href="https://graphql.org/learn/execution/">

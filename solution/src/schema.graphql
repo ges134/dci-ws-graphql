@@ -1,0 +1,66 @@
+scalar Date
+
+type Query {
+  aLotOfFines: [Fine!]!
+  breakdownOfCrimes: [CrimesBreakdown!]!
+  etsProportions: [TransportBreakdown!]!
+  highSteaks: [OffenderAmounts!]!
+  howLongBeforeTheJudgment: WaitingJudgementStats!
+  thatsAWholeLotOfCommutes: [MorningCommuteCount!]!
+  trucksAndMoreTrucks: [TransportBreakdown!]!
+  whenDoTheyHappen: [ShiftCrimeAnalysis!]!
+  whereDoPedestriansGo: [DirectionBreakDown!]!
+}
+
+type Fine {
+  day: Date!
+  averageAmount: Int!
+  amounts: [Int!]!
+}
+
+type CrimesBreakdown {
+  year: Int!
+  crime: String!
+}
+
+type TransportBreakdown {
+  category: String!
+  percentage: Float!
+}
+
+type OffenderAmounts {
+  establishment: String!
+  totalFine: Int!
+}
+
+type WaitingJudgementTime {
+  waitingTime: Int!
+  differenceWithAverage: Int!
+}
+
+type WaitingJudgementStats {
+  averageWaitingTime: Int!
+  entries: [WaitingJudgementTime!]!
+}
+
+type MorningCommuteCount {
+  intersection: String!
+  numberOfCommuters: Int!
+}
+
+type CrimesForShift {
+  shift: String!
+  numberOfCrimes: Int!
+}
+
+type ShiftCrimeAnalysis {
+  most: CrimesForShift!
+  less: CrimesForShift!
+  difference: Int!
+  year: Int!
+}
+
+type DirectionBreakDown {
+  direction: String!
+  numberOfPedestrians: Int!
+}

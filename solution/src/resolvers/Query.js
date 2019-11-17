@@ -4,7 +4,7 @@ const {
 
 const host = process.env.API_HOST || 'http://localhost:4000';
 
-const trafficLightCount = async () => {
+const etsProportions = async () => {
   const query = `
     query {
       trafficLightCount(intersection: "Notre-Dame / Peel") {
@@ -40,10 +40,57 @@ const trafficLightCount = async () => {
 
   const result = trafficLightCount;
 
-  let totalCar = 0,
-    totalBike = 0,
-    totalPedestrian = 0,
-    totalOther = 0;
+  const totals = [{
+    category: 'Autos',
+    total: 0,
+  }, {
+    category: 'Camions légers',
+    total: 0,
+  }, {
+    category: 'Camions lourds',
+    total: 0,
+  }, {
+    category: 'Piétons',
+    total: 0,
+  }, {
+    category: 'Vélos',
+    total: 0,
+  }, {
+    category: 'Bus',
+    total: 0,
+  }, {
+    category: 'Ecolier',
+    total: 0,
+  }, {
+    category: 'Camions',
+    total: 0,
+  }, {
+    category: 'Camions porteurs',
+    total: 0,
+  }, {
+    category: 'Camions articules',
+    total: 0,
+  }, {
+    category: 'Motos',
+    total: 0,
+  }, {
+    category: 'Non Utilisé',
+    total: 0,
+  }, {
+    category: 'Uturn',
+    total: 0,
+  }, {
+    category: 'Illégaux',
+    total: 0,
+  }, {
+    category: 'Autres',
+    total: 0,
+  }, {
+    category: 'Tous',
+    total: 0,
+  }];
+
+  const bankCodes = [0, 1, 2, 10, 11, 12, 13, 14, 15, 16, 17, 20, 21, 22, 40, 100];
 
   for (let i = 0; i < result.length; i++) {
     const {
@@ -69,65 +116,45 @@ const trafficLightCount = async () => {
       eastApproach,
       westApproach
     } = result[i];
-    if (bankCode === 0) {
-      totalCar +=
-        NBLT +
-        NBT +
-        NBRT +
-        NBUT +
-        SBLT +
-        SBT +
-        SBRT +
-        SBUT +
-        EBLT +
-        EBT +
-        EBRT +
-        EBUT +
-        WBLT +
-        WBT +
-        WBRT +
-        WBUT;
-    } else if (bankCode === 10) {
-      totalPedestrian +=
-        northApproach + southApproach + eastApproach + westApproach;
-    } else if (bankCode == 11) {
-      totalBike += northApproach + southApproach + eastApproach + westApproach;
-    } else {
-      totalOther +=
-        NBLT +
-        NBT +
-        NBRT +
-        NBUT +
-        SBLT +
-        SBT +
-        SBRT +
-        SBUT +
-        EBLT +
-        EBT +
-        EBRT +
-        EBUT +
-        WBLT +
-        WBT +
-        WBRT +
-        WBUT +
-        northApproach +
-        southApproach +
-        eastApproach +
-        westApproach;
-    }
+
+    const total =
+      NBLT +
+      NBT +
+      NBRT +
+      NBUT +
+      SBLT +
+      SBT +
+      SBRT +
+      SBUT +
+      EBLT +
+      EBT +
+      EBRT +
+      EBUT +
+      WBLT +
+      WBT +
+      WBRT +
+      WBUT +
+      northApproach +
+      southApproach +
+      eastApproach +
+      westApproach;
+
+    totals[bankCodes.indexOf(bankCode)].total += total;
   }
 
-  const total = totalBike + totalCar + totalPedestrian + totalOther;
+  let sum = 0;
+  totals.forEach(e => {
+    console.log(e);
+    sum += e.total;
+  });
 
-  const percentageBike = Math.round((totalBike / total) * 100);
-  const percentageCar = Math.round((totalCar / total) * 100);
-  const percentagePedestrian = Math.round((totalPedestrian / total) * 100);
-
-  console.log(
-    `pb:${percentageBike};pc:${percentageCar};pp:${percentagePedestrian}`
-  );
+  return totals.map(e => ({
+    category: e.category,
+    percentage: Math.round((e.total / sum) * 100)
+  }));
 };
 
+// TODO: this challenges doesn't collide with anwsers. Remove anwsers.
 const thatsAWholeLotOfCommutes = async () => {
   const query = `
     query {
@@ -219,11 +246,13 @@ const thatsAWholeLotOfCommutes = async () => {
       count.push(total);
     }
   });
-  const sortedCount = count.sort((a, b) => a - b).reverse();
 
-  const idx = count.indexOf(sortedCount[0]);
-  console.log(intersections[idx]);
-  console.log(count[idx]);
+  const intersectionBreakdown = count.map((e, i) => ({
+    intersection: intersections[i],
+    numberOfCommuters: e
+  }));
+
+  return intersectionBreakdown.sort((a, b) => a.numberOfCommuters - b.numberOfCommuters).reverse();
 };
 
 const whereDoPedestriansGo = async () => {
@@ -254,40 +283,33 @@ const whereDoPedestriansGo = async () => {
     east += e.eastApproach;
   });
 
-  const ranking = [north, south, west, east].sort((a, b) => a - b).reverse();
-  const difference = ranking[0] + ranking[1];
-
-  let direction = '';
-  if (ranking[0] === north) {
-    direction = 'nord';
-  } else if (ranking[0] === south) {
-    direction = 'sud';
-  } else if (ranking[0] === west) {
-    direction = 'ouest';
-  } else if (ranking[0] === east) {
-    direction = 'est';
-  }
-
-  console.log(north);
-  console.log(east);
-  console.log(south);
-  console.log(west);
-  console.log(`d:${direction}-e:${difference}`);
+  return [{
+    direction: 'nord',
+    numberOfPedestrians: north
+  }, {
+    direction: 'south',
+    numberOfPedestrians: south
+  }, {
+    direction: 'west',
+    numberOfPedestrians: west
+  }, {
+    direction: 'east',
+    numberOfPedestrians: east
+  }];
 };
 
+// We shouldn't be using async/await in forEach callback since it's not aware. 
+// https://zellwk.com/blog/async-await-in-loops/
 const trucksAndMoreTrucks = async () => {
   const codes = [1, 2, 14, 15, 16];
+  const categories = ['Camions légers', 'Camions lourds', 'Camions', 'Camions porteurs', 'Camions articules'];
+  const totals = [];
+  let total = 0;
 
-  let cle = 0,
-    clo = 0,
-    c = 0,
-    cp = 0,
-    ca = 0;
-
-  codes.forEach(async code => {
+  for (let i = 0; i < codes.length; i++) {
     const query = `
       query {
-        trafficLightCount(bankCode: ${code}) {
+        trafficLightCount(bankCode: ${codes[i]}) {
           NBLT
           NBT
           NBRT
@@ -308,11 +330,11 @@ const trucksAndMoreTrucks = async () => {
       }
     `;
 
-    let sum = 0;
-
     const {
       trafficLightCount
     } = await request(`${host}/`, query);
+
+    let sum = 0;
 
     trafficLightCount.forEach(e => {
       const {
@@ -353,47 +375,17 @@ const trucksAndMoreTrucks = async () => {
         WBUT;
     });
 
-    switch (code) {
-      case 1:
-        cle += sum;
-        break;
-      case 2:
-        clo += sum;
-        break;
-      case 14:
-        c += sum;
-        break;
-      case 15:
-        cp += sum;
-        break;
-      case 16:
-        ca += sum;
-        break;
-    }
+    totals.push(sum);
+    total += sum;
+  }
 
-    const total = cle + clo + c + cp + ca;
-    const percentages = [
-      Math.round((cle / total) * 100),
-      Math.round((clo / total) * 100),
-      Math.round((c / total) * 100),
-      Math.round((cp / total) * 100),
-      Math.round((ca / total) * 100)
-    ];
-
-    console.log(cle);
-    console.log(clo);
-    console.log(c);
-    console.log(cp);
-    console.log(ca);
-
-    console.log(
-      `cle:${percentages[0]}-clo:${percentages[1]}-c:${percentages[2]}-cp:${
-        percentages[3]
-      }-ca:${percentages[4]}`
-    );
-  });
+  return categories.map((e, i) => ({
+    category: e,
+    percentage: Math.round(totals[i] / total * 100)
+  }));
 };
 
+// TODO: the awnser provided in anwsers folder is incorrect. Correct this.
 const highSteaks = async () => {
   const query = `
     query {
@@ -425,10 +417,12 @@ const highSteaks = async () => {
     }
   });
 
-  const highestFined =
-    establishments[amounts.indexOf(amounts.sort((a, b) => a - b).reverse()[0])];
 
-  console.log(highestFined);
+
+  return establishments.map((e, i) => ({
+    establishment: e,
+    totalFine: amounts[i]
+  })).sort((a, b) => a.totalFine - b.totalFine).reverse();
 };
 
 const aLotOfFines = async () => {
@@ -445,40 +439,33 @@ const aLotOfFines = async () => {
     foodInspectionOffenders
   } = await request(`${host}/`, query);
 
-  dates = [];
-  counts = [];
+  const sorted = foodInspectionOffenders.sort((a, b) => a.violationDate - b.violationDate);
 
-  foodInspectionOffenders.forEach(value => {
-    const {
-      violationDate
-    } = value;
+  const fines = [];
 
-    console.log(violationDate);
-
-    if (dates.includes(violationDate)) {
-      counts[dates.indexOf(violationDate)] += 1;
+  sorted.forEach(value => {
+    const filtered = fines.filter(e => e.day === value.violationDate);
+    if (filtered.length) {
+      const current = fines[fines.indexOf(filtered[0])];
+      current.amounts.push(value.amount);
     } else {
-      dates.push(violationDate);
-      counts.push(1);
+      fines.push({
+        day: value.violationDate,
+        averageAmount: 0,
+        amounts: [value.amount],
+      });
     }
   });
 
-  const dateWithMostInfractions =
-    dates[counts.indexOf(counts.sort((a, b) => a - b).reverse()[0])];
-
-  const amountsOfMostInfractions = foodInspectionOffenders
-    .filter(value => value.violationDate === dateWithMostInfractions)
-    .map(value => value.amount);
-
-  let total = 0;
-
-  amountsOfMostInfractions.forEach(amount => {
-    total += amount;
+  fines.forEach(value => {
+    let sum = 0;
+    value.amounts.forEach(amount => {
+      sum += amount;
+    });
+    value.averageAmount = Math.round(sum / value.amounts.length);
   });
 
-  const average = Math.round(total / amountsOfMostInfractions.length);
-
-  console.log(average);
+  return fines;
 };
 
 const howLongBeforeTheJudgment = async () => {
@@ -499,15 +486,18 @@ const howLongBeforeTheJudgment = async () => {
 
   let sum = 0;
   differences.forEach(value => {
-    sum += value
+    sum += value;
   });
 
   const average = Math.round(sum / differences.length);
-  const max = Math.max(...differences) - average;
-  const min = average - Math.min(...differences);
-
-  console.log(`moy:${average}-max:${max}-min:${min}`);
-}
+  return {
+    averageWaitingTime: average,
+    entries: differences.map(e => ({
+      waitingTime: e,
+      differenceWithAverage: e - average
+    }))
+  };
+};
 
 
 const filterYear = (crimes, year) =>
@@ -592,9 +582,27 @@ const breakdownOfCrimes = async () => {
   );
   usedCategories.push(highest2019);
 
-  console.log(
-    `2015.${highest2015}-2016.${highest2016}-2017.${highest2017}-2018.${highest2018}-2019.${highest2019}`
-  );
+  return [{
+      year: 2015,
+      crime: highest2015,
+    },
+    {
+      year: 2016,
+      crime: highest2016,
+    },
+    {
+      year: 2017,
+      crime: highest2017,
+    },
+    {
+      year: 2018,
+      crime: highest2018,
+    },
+    {
+      year: 2019,
+      crime: highest2019,
+    },
+  ];
 };
 
 const whenDoTheyHappen = async () => {
@@ -624,23 +632,39 @@ const whenDoTheyHappen = async () => {
     night[i] = current.filter(value => value.shift === 'nuit').length;
   }
 
-  let stats = [];
+  return years.map((e, i) => {
+    const dayShift = {
+      shift: 'jour',
+      numberOfCrimes: day[i],
+    };
 
-  for (let i = 0; i < years.length; i++) {
-    const max = Math.max(day[i], evening[i], night[i]);
-    const min = Math.min(day[i], evening[i], night[i]);
+    const eveningShift = {
+      shift: 'soir',
+      numberOfCrimes: evening[i],
+    };
 
-    const shiftMax = max === day[i] ? 'jour' : max === evening[i] ? 'soir' : 'nuit';
-    const shiftMin = min === day[i] ? 'jour' : min === evening[i] ? 'soir' : 'nuit';
+    const nightShift = {
+      shift: 'nuit',
+      numberOfCrimes: night[i],
+    };
 
-    stats.push(`${years[i]}.${shiftMax};${shiftMin};${max-min}`);
-  }
+    const SortedShifts = [dayShift, eveningShift, nightShift].sort((a, b) => a.numberOfCrimes - b.numberOfCrimes);
 
-  console.log(stats.join('-'));
+    // eslint-disable-next-line no-unused-vars
+    const [min, mid, max] = SortedShifts;
+
+    return {
+      most: max,
+      less: min,
+      difference: max.numberOfCrimes - min.numberOfCrimes,
+      year: e
+    };
+
+  });
 };
 
 module.exports = {
-  trafficLightCount,
+  etsProportions,
   thatsAWholeLotOfCommutes,
   whereDoPedestriansGo,
   trucksAndMoreTrucks,
