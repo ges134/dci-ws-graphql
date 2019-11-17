@@ -2,11 +2,11 @@
 
 ## Description
 
-On a fait 9 challenges qui traitent les données ouvertes de la ville de Montréal. Avec les mêmes ensembles de données, aurais-tu des statistiques qui pourrait être intéressantes?
+On a fait 9 challenges qui traitent les données ouvertes de la ville de Montréal. Avec les mêmes ensembles de données, aurais-tu des statistiques qui pourraient être intéressantes?
 
 ## Modalités
 
-Pour obtenir un flag, il faut être en mesure de me montrer une statistique qui pourrait m'impressionner. Le critère est assez simple : Je ne dois pas être en mesure de trouver la même statistique en cinq clics. Vous devez me montrer mon code également.
+Pour obtenir un flag, il faut être en mesure de me montrer une statistique qui pourrait m'impressionner. Le critère est assez simple : je ne dois pas être en mesure de trouver la même statistique en quelques clics sur Excel. Également, vous devrez me montrer votre code.
 
 ## Flags
 

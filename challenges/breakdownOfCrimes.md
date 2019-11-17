@@ -2,9 +2,9 @@
 
 ## Question
 
-Pour l'année 2015, 2016, 2017, 2018 et 2019, on constate que la même catégorie de crime a nécéssité le plus d'interventions policières. On va donc faire une "analyse" des crimes, mais chaque catégorie de crime ne peut pas se retrouver deux fois dans l'analyse. Également, l'élimination commence en 2015 pour se terminer en 2019.
+Pour l'année 2015, 2016, 2017, 2018 et 2019, on constate que la même catégorie de crime a nécessité le plus d'interventions policières. On va donc faire une "analyse" des crimes, mais chaque catégorie de crime ne peut pas se retrouver deux fois dans l'analyse. Également, l'élimination commence en 2015 pour se terminer en 2019.
 
-Ainsi, si la catégorie de crime **Introduction** est la catégorie de crimes la plus retrouvée en 2015, on ne pourras plus utiliser ces catégories pour les années à venir.
+Ainsi, si la catégorie de crime **Introduction** est la catégorie de crimes la plus retrouvée en 2015, on ne pourra plus utiliser ces catégories pour les années à venir.
 
 ## Format de la réponse
 
