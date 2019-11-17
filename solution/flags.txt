@@ -1,0 +1,12 @@
+etsProportions --- pb:0;pc:60;pp:36
+thatsAWholeLotOfCommutes --- Acadie / Sauvé
+whereDoPedestriansGo --- d:nord-e:37397
+trucksAndMoreTrucks --- cle:13-clo:6-c:78-cp:3-ca:0
+highSteaks --- SUPER MARCHE TROPIC
+aLotOfFines --- 1614
+breakdownOfCrimes --- 2015.Introduction-2016.Vol dans / sur véhicule à moteur-2017.Vol de véhicule à moteur-2018.Méfait-2019.Vol qualifié
+whenDoTheyHappen --- 2015.jour;nuit;12442-2016.jour;nuit;11617-2017.jour;nuit;11372-2018.jour;nuit;10310-2019.jour;nuit;7760
+howLongBeforeTheJudgment --- moy:428-max:1198-min:428
+ImpressMe1 --- Flag-O0O0ONNYG0D
+ImpressMe2 --- Flag-IC@nn077h1nk@b0u77h15
+ImpressMe3 --- Flag-0mglul7h@7151n5@n3

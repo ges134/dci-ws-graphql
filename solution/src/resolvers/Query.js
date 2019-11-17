@@ -465,7 +465,7 @@ const aLotOfFines = async () => {
     value.averageAmount = Math.round(sum / value.amounts.length);
   });
 
-  return fines;
+  return fines.sort((a, b) => a.amounts.length - b.amounts.length).reverse();
 };
 
 const howLongBeforeTheJudgment = async () => {
@@ -482,7 +482,10 @@ const howLongBeforeTheJudgment = async () => {
     foodInspectionOffenders
   } = await request(`${host}/`, query);
 
-  const differences = foodInspectionOffenders.map(element => Math.ceil((new Date(element.judgementDate) - new Date(element.violationDate)) / (1000 * 60 * 60 * 24)));
+  let differences = foodInspectionOffenders
+    .map(element => Math.ceil((new Date(element.judgementDate) - new Date(element.violationDate)) / (1000 * 60 * 60 * 24)))
+    .sort((a, b) => a - b)
+    .reverse();
 
   let sum = 0;
   differences.forEach(value => {
@@ -494,7 +497,7 @@ const howLongBeforeTheJudgment = async () => {
     averageWaitingTime: average,
     entries: differences.map(e => ({
       waitingTime: e,
-      differenceWithAverage: e - average
+      differenceWithAverage: Math.abs(e - average)
     }))
   };
 };

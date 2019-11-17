@@ -19,4 +19,4 @@ La réponse serait : `d:ouest-e:24`
 
 ## Réponse
 
-`d:nord-e:2674883`
+`d:nord-e:37397`
