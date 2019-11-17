@@ -1,4 +1,4 @@
-# Mais quand est-ce qu'ils se produisent
+# Mais quand est-ce qu'ils se produisent?
 
 ## Question
 
@@ -15,7 +15,7 @@ où:
 - `MMMM`: le quart où il y a eu le moins d'interventions policières.
 - `DDDD`: la différence entre la valeur maximale et minimale.
 
-Par exemple, si en 2017, le quart où il y a eu le plus d'interventions policières est le jour, le quart où il y en a eu le moins et le soir et la différence est de 1345, la réponse serait `2017.jour;soir;1145`;
+Par exemple, si en 2017, le quart où il y a eu le plus d'interventions policières est le jour, le quart où il y en a eu le moins et le soir et la différence est de 1345, la réponse serait `2017.jour;soir;1145`.
 
 ## Réponse
 
