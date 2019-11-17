@@ -1,72 +1,388 @@
 scalar Date
 
 type Query {
+  """
+  Obtiens des données de l'ensemble de données sur le comptage des véhicules et des piétons.
+  Le type de retour est documenté selon ce qui est spécifié au portail de données ouvertes de la ville de Montréal.
+  Ce jeu de données contient quelques centaines de milliers d'enregistrements.
+  Je vous recommande d'utiliser les paramètres pour filtrer les données.
+  """
   trafficLightCount(
+    """
+    Le nom d'une intersection où l'on désire obtenir des données.
+    """
     intersection: String
+
+    """
+    L'heure de début où l'on désire obtenir des données.
+    Ce paramètre sera comparé au champ TrafficLight.hour
+    """
     beginHour: Int
+
+    """
+    L'heure de fin où l'on désire obtenir des données.
+    Ce paramètre sera comparé au champ TrafficLight.hour
+    """
     endHour: Int
+
+    """
+    Le code banque du type de la classification des véhicules, vélos et piétons.
+    Voir TrafficLight.bankCodeDescription pour plus de détails.
+    """
     bankCode: Int
   ): [TrafficLight!]!
+
+  """
+  Obtiens des données de l'ensemble de données sur les contrevenants aux inspections alimentaires.
+  Le type de retour est documenté selon ce qui est spécifié au portail de données ouvertes de la ville de Montréal.
+  La ville de Montréal n'a pas fourni de documentation sur les champs.
+  """
   foodInspectionOffenders: [FoodInspectionOffenders!]!
+
+  """
+  Obtiens des données sur l'ensemble des données des interventions policières.
+  Le type de retour est documenté selon ce qui est spécifié au portail de données ouvertes de la ville de Montréal.
+  """
   policeIntervention: [PoliceIntervention!]!
 }
 
+"""
+Cet ensemble de données fait état du comptage des véhicules et des piétons à la majorité des intersections munies de feux de circulation,
+ainsi que certaines intersections où l’installation de feux était à l’étude.
+Pour chacune de ces intersections, toutes situées dans les 19 arrondissements,
+le nombre de véhicules et de piétons a été relevé à différentes périodes d’une journée type.
+Les comptages peuvent parfois ne pas tenir compte de certains usagers (piétons, cyclistes, camions par exemple).
+
+Les comptages furent réalisés dans le cadre de la mise aux normes des feux.
+Ce sont donc des comptages issus des services centraux et ne n'incluent pas les comptages faits par les arrondissements.
+
+Méthodologie:
+Observation sur le terrain à l’aide d’un appareil de comptage électronique.
+Les relevés sont effectués à des intervalles de 15 minutes durant certaines périodes de la journée :
+ces périodes correspondent généralement aux périodes de pointe du matin et du soir, en plus de la période du midi.
+La durée d’observation pour une journée spécifique varie de 3 à 8 heures selon l’intersection.
+Les observations détaillent le nombre, la provenance et la direction des véhicules, des piétons et des cyclistes pour chaque mouvement possible à une intersection.
+"""
 type TrafficLight {
+  """
+  Identifiant unique de chaque comptage
+  """
   referenceId: Int!
+
+  """
+  Numéro de l'intersection
+  """
   intersectionId: Int!
+
+  """
+  Nom de l'intersection
+  """
   intersectionName: String!
+
+  """
+  Date du comptage (date et heure).
+  """
   date: Date!
+
+  """
+  Période de comptage (heure)
+  """
   period: Date!
+
+  """
+  Heure du début de la période de comptage
+  """
   hour: Int!
+
+  """
+  Minute du début de la période de comptage
+  """
   minute: Int!
+
+  """
+  Seconde du début de la période de comptage
+  """
   second: Int!
+
+  """
+  Classification des véhicules, piétons et vélos
+  Voir bankCodeDescription.
+  """
   bankCode: Int!
+
+  """
+  Description de la banque de véhicule concerné
+  - 0:Autos
+  - 1:Camions légers
+  - 2:Camions lourds
+  - 10:Piétons
+  - 11:Vélos
+  - 12:Bus
+  - 13:Ecolier
+  - 14:Camions
+  - 15:Camions porteurs
+  - 16:Camions articules
+  - 17:Motos
+  - 20:Non Utilisé
+  - 21:Uturn
+  - 22:Illégaux
+  - 40:Autres
+  - 100:Tous
+  """
   bankCodeDescription: String!
+
+  """
+  North Bound Left Turn / Direction nord, virage à gauche
+  """
   NBLT: Int!
+
+  """
+  North Bound Thru / Direction nord, tout droit
+  """
   NBT: Int!
+
+  """
+  North Bound Right Turn / Direction nord, virage à droite
+  """
   NBRT: Int!
+  """
+  North Bound U-Turn/Direction nord, demi tour
+  """
   NBUT: Int!
+
+  """
+  South Bound U-Turn/Direction sud, demi tour
+  """
   SBLT: Int!
+
+  """
+  South Bound Thru / Direction sud, tout droit
+  """
   SBT: Int!
+
+  """
+  South Bound Right Turn / Direction sud, virage à droite
+  """
   SBRT: Int!
+
+  """
+  South Bound U-Turn/Direction sud, demi tour
+  """
   SBUT: Int!
+
+  """
+  East Bound Left Turn / Direction est, virage à gauche
+  """
   EBLT: Int!
+
+  """
+  East Bound Thru / Direction est, tout droit
+  """
   EBT: Int!
+
+  """
+  East Bound Right Turn / Direction est, virage à droite
+  """
   EBRT: Int!
+
+  """
+  East Bound U-Turn/Direction est, demi tour
+  """
   EBUT: Int!
+
+  """
+  West Bound Left Turn / Direction ouest, virage à gauche
+  """
   WBLT: Int!
+
+  """
+  West Bound Thru / Direction ouest, tout droit
+  """
   WBT: Int!
+
+  """
+  West Bound Right Turn / Direction ouest, virage à droite
+  """
   WBRT: Int!
+
+  """
+  West Bound U-Turn/ Direction ouest,demi tour
+  """
   WBUT: Int!
+
+  """
+  Comptage piéton ou vélo, traverse côté nord de l'intersection
+  """
   northApproach: Int!
+
+  """
+  Comptage piéton ou vélo, traverse côté sud de l'intersection
+  """
   southApproach: Int!
+
+  """
+  Comptage piéton ou vélo, traverse côté est de l'intersection
+  """
   eastApproach: Int!
+
+  """
+  Comptage piéton ou vélo, traverse côté ouest de l'intersection
+  """
   westApproach: Int!
+
+  """
+  Localisation X de Québec Modified Transverse Mercator Zone 8 (NAD83)
+  """
   xLocalisation: String!
+
+  """
+  Localisation Y de Québec Modified Transverse Mercator Zone 8 (NAD83)
+  """
   yLocalisation: String!
+
+  """
+  Longitude en WGS 84
+  """
   longitude: Float!
+
+  """
+  Latitude en WGS 84
+  """
   latitude: Float!
 }
 
+"""
+Liste des établissements alimentaires situés sur le territoire de l’agglomération montréalaise
+et sous la responsabilité de la Division de l’inspection des aliments de la Ville de Montréal
+ayant fait l’objet d’une condamnation pour une infraction à la Loi sur les produits alimentaires
+(L.R.Q., c. P-29) et ses règlements.
+
+Méthodologie
+Lors de l’inspection d’un établissement alimentaire,
+si l’inspecteur constate une infraction à la réglementation,
+il dresse un avis d’infraction précisant les correctifs à apporter.
+Devant le refus d’obtempérer,
+une poursuite judiciaire est intentée contre l’exploitant de l’établissement qui est passible d’une amende s’il est reconnu coupable.
+Lorsqu’une condamnation est prononcée contre un exploitant,
+elle est divulguée pour une période de 3 ans sur la Liste des contrevenants condamnés publiée sur le site Internet de la Ville de Montréal et mise à jour mensuellement.
+"""
 type FoodInspectionOffenders {
+  """
+  Addresse de l'établissement
+  """
   address: String!
+
+  """
+  Catégorie de l'établissement
+  """
   category: String!
+
+  """
+  Date de l'infraction
+  """
   violationDate: Date!
+
+  """
+  Date du jugement
+  """
   judgementDate: Date!
+
+  """
+  Description de l'infraction
+  """
   description: String!
+
+  """
+  Établissement
+  """
   establishment: String!
+
+  """
+  Montant
+  """
   amount: Int!
+
+  """
+  Propriétaire
+  """
   owner: String!
+
+  """
+  Ville
+  """
   city: String!
 }
 
+"""
+Actes criminels enregistrés par le Service de police de la Ville de Montréal (SPVM).
+
+Avertissement
+
+ - Les données sont divulguées telles que rapportées au SPVM. Il est normal qu’il existe un écart entre celles-ci et celles compilées officiellement par le Centre canadien de la statistique juridique puisque le statut d’un incident peut être modifié en cours d’enquête.
+ - La section méthodologie contient plusieurs éléments importants pour l'interprétation des données.
+
+Méthodologie - Vie privée
+Les données ont été obfusquées et modifiées pour garantir le respect à la vie privée et la protection des renseignements personnels:
+Localisation : la position géographique de l'événement a été localisée à une des intersections du segment de rue où s'est passé l'événement.
+Temporalité : le moment de l'événement est représenté par la date et le quart de travail (ou moment de la journée : jour, soir, nuit) durant lequel l'événement a été enregistré.
+"""
 type PoliceIntervention {
+  """
+  Nature de l'événement. Liste de valeur :
+
+   - Introduction : introduction par effraction dans un établissement public ou une résidence privée, vol d’arme à feu dans une résidence
+   - Vol dans / sur véhicule à moteur : vol du contenu d’un véhicule à moteur (voiture, camion, motocyclette, etc.) ou d’une pièce de véhicule (roue, parechoc, etc.)
+   - Vol de véhicule à moteur : vol de voiture, camion, motocyclette, motoneige tracteur avec ou sans remorque, véhicule de construction ou de ferme, tout-terrain
+   - Méfait : Graffiti et dommage de biens religieux, de véhicule ou dommage général et tous autres types de méfaits
+   - Vol qualifié : Vol accompagné de violence de commerce, institution financière, personne, sac à main, véhicule blindé, véhicule, arme à feu, et tous autres types de vols qualifiés
+   - Infraction entraînant la mort : Meurtre au premier degré, meurtre au deuxième degré, homicide involontaire, infanticide, négligence criminelle, et tous autres types d’infractions entraînant la mort
+  """
   category: String!
+
+  """
+  Date du signalement de l'événement au SPVM au format AAAA-MM-JJ HH:mm:ss
+  (note: la partie de l'heure n'est pas utilisée)
+  """
   date: Date!
+
+  """
+  Moment de la journée du signalement de l'événement au SPVM. Liste de valeur :
+
+  - jour : Entre 8h01 et 16h
+  - soir : Entre 16h01 et minuit
+  - nuit : Entre 00h01 et 8h
+  """
   shift: String!
+
+  """
+  Numéro du poste de quartier couvrant le territoire où s'est passé l'événement.
+  Le territoire couvert par chaque poste est disponible dans l'ensemble de données des limites de PDQ
+  """
   station: Int!
+
+  """
+  Position géospatiale selon la projection MTM8 (SRID 2950)
+
+   - La valeur 0 est utilisée lorsqu'aucune position géographique n'a été fournie lors de la saisie de l'information (moins de 5% des cas).
+   - La valeur 1 est utilisée lorsqu'aucune position géographique n'a été fournie lors de la saisie de l'information (moins de 5% des cas).
+  """
   x: Float!
+
+  """
+  Position géospatiale selon la projection MTM8 (SRID 2950)
+
+   - La valeur 0 est utilisée lorsqu'aucune position géographique n'a été fournie lors de la saisie de l'information (moins de 5% des cas).
+   - La valeur 1 est utilisée lorsqu'aucune position géographique n'a été fournie lors de la saisie de l'information (moins de 5% des cas).
+  """
   y: Float!
+
+  """
+  position géographique de l'événement après obfuscation à une intersection selon le référentiel géodésique WGS84.
+  """
   longitude: Float!
+
+  """
+  position géographique de l'événement après obfuscation à une intersection selon le référentiel géodésique WGS84.
+  """
   latitude: Float!
 }
