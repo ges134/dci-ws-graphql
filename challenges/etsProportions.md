@@ -2,7 +2,7 @@
 
 # Question?
 
-Entre 2014 et 2018, quel est le pourcentage de piétons, d'automobilistes et de cyclistes qui traversaient l'intersection Peel/Notre-Dame.
+Entre 2014 et 2018, quel est le pourcentage de piétons, d'automobilistes et de cyclistes qui traversaient l'intersection Peel/Notre-Dame ?
 
 # Format de la réponse
 

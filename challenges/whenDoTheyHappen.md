@@ -1,8 +1,8 @@
-# Mais quand est-ce qu'ils se produisent
+# Mais quand est-ce qu'ils se produisent?
 
 ## Question
 
-Pour chaque année (2015 à 2019), indiquez le moment quart où il y a eu le plus d'interventions policières et le quart où il y en a eu le moins. Indiquez également la différence.
+Pour chaque année (2015 à 2019), indiquez le quart où il y a eu le plus d'interventions policières et le quart où il y en a eu le moins. Indiquez également la différence entre les deux.
 
 ## Format de la réponse
 
@@ -15,7 +15,7 @@ où:
 - `MMMM`: le quart où il y a eu le moins d'interventions policières.
 - `DDDD`: la différence entre la valeur maximale et minimale.
 
-Par exemple, si en 2017, le quart où il y a eu le plus d'interventions policières est le jour, le quart où il y en a eu le moins et le soir et la différence est de 1345, la réponse serait `2017.jour;soir;1145`;
+Par exemple, si en 2017, le quart où il y a eu le plus d'interventions policières est le jour, le quart où il y en a eu le moins et le soir et la différence est de 1345, la réponse serait `2017.jour;soir;1145`.
 
 ## Réponse
 

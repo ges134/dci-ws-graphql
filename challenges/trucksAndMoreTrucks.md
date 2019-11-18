@@ -1,8 +1,8 @@
-# Des camions et plus de camion
+# Des camions et plus de camions
 
 ## Question
 
-Les données de la ville de Montréal possèdent plusieurs enregistrement sur les camions. Quel est la répartion entre les camions?
+Les données de la ville de Montréal possèdent plusieurs enregistrements sur les camions. Quelle est la répartition entre les camions?
 
 ## Format de la réponse
 
@@ -18,7 +18,7 @@ où:
 
 Chaque pourcentage doit être arrondi à l'unité près.
 
-Si on a la proportion suivante:
+Par exemple, si on a la proportion suivante:
 
 - camions léger: 23,10%
 - camions lourd: 15,15%

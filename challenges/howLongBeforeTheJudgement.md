@@ -2,7 +2,7 @@
 
 ## Question
 
-En moyenne, combien de jours s'écoulent entre la déclaration d'une infraction et le jugement de cette même infraction? Quel est la différence entre la moyenne et la valeur maximale et minimale.
+En moyenne, combien de jours s'écoulent entre la déclaration d'une infraction et le jugement de cette même infraction? Quelle est la différence entre la moyenne et la valeur maximale et minimale ?
 
 ## Format de la réponse
 

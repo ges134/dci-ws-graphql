@@ -1,8 +1,8 @@
-# Mais où vont les piétons
+# Mais où vont les piétons?
 
 ## Question
 
-Dans quelle direction vont les piétons? Quel est l'écart entre la direction la plus empruntée et la deuxième position?
+Quelle est la direction la plus utilisé par les piétons? Quel est l'écart entre la direction la plus empruntée et la deuxième position?
 
 ## Format de la réponse
 
@@ -19,4 +19,4 @@ La réponse serait : `d:ouest-e:24`
 
 ## Réponse
 
-`d:nord-e:2674883`
+`d:nord-e:37397`

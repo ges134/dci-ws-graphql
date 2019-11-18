@@ -6,4 +6,4 @@ Dans la journée où on a constaté le plus d'infractions, quel est le montant m
 
 ## Réponse
 
-`625`
+`1614`
