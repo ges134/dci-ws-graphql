@@ -111,7 +111,7 @@ fs.createReadStream('./src/data/comptage-feux-2014-2018.csv')
       )
       .on('data', data => {
         foodInspectionOffenders.push({
-          address: data['/contrevenant/addresse'],
+          address: data['/contrevenant/adresse'],
           category: data['/contrevenant/categorie'],
           violationDate: moment(
             data['/contrevenant/date_infraction'],
