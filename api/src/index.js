@@ -12,8 +12,6 @@ const moment = require('moment');
 
 console.log('setting dependencies...');
 moment.locale('fr-ca');
-console.log(moment.locale());
-
 console.log('dependencies set!');
 
 console.log('reading csv files...');
