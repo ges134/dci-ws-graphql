@@ -1,42 +1,26 @@
 const {
-  request
-} = require('graphql-request');
-
-const host = process.env.API_HOST || 'http://localhost:4000';
+  etsProportionsQuery,
+  thatsAWholeLotOfCommutesQuery,
+  whereDoPedestriansGoQuery,
+  trucksAndMoreTrucksQuery,
+  highSteaksQuery,
+  alotOfFinesQuery,
+  howLongBeforeTheJudgementQuery,
+  breakdownOfCrimesQuery,
+  whenDoTheyHappenQuery
+} = require('./requests');
+const {
+  callAPI,
+  allCountsForEntry,
+  filterYear,
+  sum,
+  avg
+} = require('./helpers');
 
 const etsProportions = async () => {
-  const query = `
-    query {
-      trafficLightCount(intersection: "Notre-Dame / Peel") {
-        bankCode
-        bankCodeDescription
-        NBLT
-        NBT
-        NBRT
-        NBUT
-        SBLT
-        SBT
-        SBRT
-        SBUT
-        EBLT
-        EBT
-        EBRT
-        EBUT
-        WBLT
-        WBT
-        WBRT
-        WBUT
-        northApproach
-        southApproach
-        eastApproach
-        westApproach
-      }
-    }
-  `;
-
   const {
     trafficLightCount
-  } = await request(`${host}/`, query);
+  } = await callAPI(etsProportionsQuery);
 
   const result = trafficLightCount;
 
@@ -94,149 +78,36 @@ const etsProportions = async () => {
 
   for (let i = 0; i < result.length; i++) {
     const {
-      bankCode,
-      NBLT,
-      NBT,
-      NBRT,
-      NBUT,
-      SBLT,
-      SBT,
-      SBRT,
-      SBUT,
-      EBLT,
-      EBT,
-      EBRT,
-      EBUT,
-      WBLT,
-      WBT,
-      WBRT,
-      WBUT,
-      northApproach,
-      southApproach,
-      eastApproach,
-      westApproach
+      bankCode
     } = result[i];
 
-    const total =
-      NBLT +
-      NBT +
-      NBRT +
-      NBUT +
-      SBLT +
-      SBT +
-      SBRT +
-      SBUT +
-      EBLT +
-      EBT +
-      EBRT +
-      EBUT +
-      WBLT +
-      WBT +
-      WBRT +
-      WBUT +
-      northApproach +
-      southApproach +
-      eastApproach +
-      westApproach;
+    const total = allCountsForEntry(result[i]);
 
     totals[bankCodes.indexOf(bankCode)].total += total;
   }
 
-  let sum = 0;
-  totals.forEach(e => {
-    console.log(e);
-    sum += e.total;
-  });
+  let sumOfElements = sum(...totals.map(e => e.total));
 
   return totals.map(e => ({
     category: e.category,
-    percentage: Math.round((e.total / sum) * 100)
+    percentage: Math.round((e.total / sumOfElements) * 100)
   }));
 };
 
-// TODO: this challenges doesn't collide with anwsers. Remove anwsers.
 const thatsAWholeLotOfCommutes = async () => {
-  const query = `
-    query {
-      trafficLightCount(beginHour: 5, endHour: 9) {
-        intersectionName
-        NBLT
-        NBT
-        NBRT
-        NBUT
-        SBLT
-        SBT
-        SBRT
-        SBUT
-        EBLT
-        EBT
-        EBRT
-        EBUT
-        WBLT
-        WBT
-        WBRT
-        WBUT
-        northApproach
-        southApproach
-        eastApproach
-        westApproach
-      }
-    }
-  `;
-
   const {
     trafficLightCount
-  } = await request(`${host}/`, query);
+  } = await callAPI(thatsAWholeLotOfCommutesQuery);
 
   const intersections = [];
   const count = [];
 
   trafficLightCount.forEach(value => {
     const {
-      intersectionName,
-      NBLT,
-      NBT,
-      NBRT,
-      NBUT,
-      SBLT,
-      SBT,
-      SBRT,
-      SBUT,
-      EBLT,
-      EBT,
-      EBRT,
-      EBUT,
-      WBLT,
-      WBT,
-      WBRT,
-      WBUT,
-      northApproach,
-      southApproach,
-      eastApproach,
-      westApproach
+      intersectionName
     } = value;
 
-    const total =
-      NBLT +
-      NBT +
-      NBRT +
-      NBUT +
-      SBLT +
-      SBT +
-      SBRT +
-      SBUT +
-      EBLT +
-      EBT +
-      EBRT +
-      EBUT +
-      WBLT +
-      WBT +
-      WBRT +
-      WBUT +
-      northApproach +
-      southApproach +
-      eastApproach +
-      westApproach;
+    const total = allCountsForEntry(value);
 
     if (intersections.includes(intersectionName)) {
       const idx = intersections.indexOf(intersectionName);
@@ -256,45 +127,34 @@ const thatsAWholeLotOfCommutes = async () => {
 };
 
 const whereDoPedestriansGo = async () => {
-  const query = `
-    query {
-      trafficLightCount(bankCode: 10) {
-        northApproach
-        southApproach
-        eastApproach
-        westApproach
-      }
-    }
-  `;
-
   const {
     trafficLightCount
-  } = await request(`${host}/`, query);
+  } = await callAPI(whereDoPedestriansGoQuery);
 
-  let north = 0,
-    south = 0,
-    west = 0,
-    east = 0;
-
-  trafficLightCount.forEach(e => {
-    north += e.northApproach;
-    south += e.southApproach;
-    west += e.westApproach;
-    east += e.eastApproach;
-  });
+  const {
+    northApproach,
+    southApproach,
+    westApproach,
+    eastApproach
+  } = trafficLightCount.reduce((a, b) => ({
+    northApproach: a.northApproach + b.northApproach,
+    southApproach: a.southApproach + b.southApproach,
+    westApproach: a.westApproach + b.westApproach,
+    eastApproach: a.eastApproach + b.eastApproach,
+  }));
 
   return [{
     direction: 'nord',
-    numberOfPedestrians: north
+    numberOfPedestrians: northApproach
   }, {
     direction: 'south',
-    numberOfPedestrians: south
+    numberOfPedestrians: southApproach
   }, {
     direction: 'west',
-    numberOfPedestrians: west
+    numberOfPedestrians: westApproach
   }, {
     direction: 'east',
-    numberOfPedestrians: east
+    numberOfPedestrians: eastApproach
   }];
 };
 
@@ -307,76 +167,13 @@ const trucksAndMoreTrucks = async () => {
   let total = 0;
 
   for (let i = 0; i < codes.length; i++) {
-    const query = `
-      query {
-        trafficLightCount(bankCode: ${codes[i]}) {
-          NBLT
-          NBT
-          NBRT
-          NBUT
-          SBLT
-          SBT
-          SBRT
-          SBUT
-          EBLT
-          EBT
-          EBRT
-          EBUT
-          WBLT
-          WBT
-          WBRT
-          WBUT
-        }
-      }
-    `;
-
     const {
       trafficLightCount
-    } = await request(`${host}/`, query);
+    } = await callAPI(trucksAndMoreTrucksQuery(codes[i]));
 
-    let sum = 0;
-
-    trafficLightCount.forEach(e => {
-      const {
-        NBLT,
-        NBT,
-        NBRT,
-        NBUT,
-        SBLT,
-        SBT,
-        SBRT,
-        SBUT,
-        EBLT,
-        EBT,
-        EBRT,
-        EBUT,
-        WBLT,
-        WBT,
-        WBRT,
-        WBUT
-      } = e;
-
-      sum +=
-        NBLT +
-        NBT +
-        NBRT +
-        NBUT +
-        SBLT +
-        SBT +
-        SBRT +
-        SBUT +
-        EBLT +
-        EBT +
-        EBRT +
-        EBUT +
-        WBLT +
-        WBT +
-        WBRT +
-        WBUT;
-    });
-
-    totals.push(sum);
-    total += sum;
+    let sumOfElements = sum(trafficLightCount.map(e => allCountsForEntry(e)));
+    totals.push(sumOfElements);
+    total += sumOfElements;
   }
 
   return categories.map((e, i) => ({
@@ -385,20 +182,10 @@ const trucksAndMoreTrucks = async () => {
   }));
 };
 
-// TODO: the awnser provided in anwsers folder is incorrect. Correct this.
 const highSteaks = async () => {
-  const query = `
-    query {
-      foodInspectionOffenders {
-        establishment
-        amount
-      }
-    }
-  `;
-
   const {
     foodInspectionOffenders
-  } = await request(`${host}/`, query);
+  } = await callAPI(highSteaksQuery);
 
   const establishments = [];
   const amounts = [];
@@ -417,8 +204,6 @@ const highSteaks = async () => {
     }
   });
 
-
-
   return establishments.map((e, i) => ({
     establishment: e,
     totalFine: amounts[i]
@@ -426,18 +211,9 @@ const highSteaks = async () => {
 };
 
 const aLotOfFines = async () => {
-  const query = `
-    query {
-      foodInspectionOffenders {
-        violationDate
-        amount
-      }
-    }
-  `;
-
   const {
     foodInspectionOffenders
-  } = await request(`${host}/`, query);
+  } = await callAPI(alotOfFinesQuery);
 
   const sorted = foodInspectionOffenders.sort((a, b) => a.violationDate - b.violationDate);
 
@@ -458,41 +234,24 @@ const aLotOfFines = async () => {
   });
 
   fines.forEach(value => {
-    let sum = 0;
-    value.amounts.forEach(amount => {
-      sum += amount;
-    });
-    value.averageAmount = Math.round(sum / value.amounts.length);
+    value.averageAmount = avg(...value.amounts);
   });
 
   return fines.sort((a, b) => a.amounts.length - b.amounts.length).reverse();
 };
 
 const howLongBeforeTheJudgment = async () => {
-  const query = `
-    query {
-      foodInspectionOffenders {
-        violationDate
-        judgementDate
-      }
-    }
-  `;
-
   const {
     foodInspectionOffenders
-  } = await request(`${host}/`, query);
+  } = await callAPI(howLongBeforeTheJudgementQuery);
 
   let differences = foodInspectionOffenders
     .map(element => Math.ceil((new Date(element.judgementDate) - new Date(element.violationDate)) / (1000 * 60 * 60 * 24)))
     .sort((a, b) => a - b)
     .reverse();
 
-  let sum = 0;
-  differences.forEach(value => {
-    sum += value;
-  });
+  const average = avg(...differences);
 
-  const average = Math.round(sum / differences.length);
   return {
     averageWaitingTime: average,
     entries: differences.map(e => ({
@@ -502,23 +261,10 @@ const howLongBeforeTheJudgment = async () => {
   };
 };
 
-
-const filterYear = (crimes, year) =>
-  crimes.filter(value => new Date(value.date).getFullYear() === year);
-
 const breakdownOfCrimes = async () => {
-  const query = `
-    query {
-      policeIntervention {
-        category
-        date
-      }
-    }
-  `;
-
   const {
     policeIntervention
-  } = await request(`${host}/`, query);
+  } = await callAPI(breakdownOfCrimesQuery);
 
   const usedCategories = [];
 
@@ -555,72 +301,27 @@ const breakdownOfCrimes = async () => {
     return category;
   };
 
-  const highest2015 = highestForYear(
-    filterYear(policeIntervention, 2015),
-    usedCategories
-  );
-  usedCategories.push(highest2015);
+  const breakdown = [];
 
-  const highest2016 = highestForYear(
-    filterYear(policeIntervention, 2016),
-    usedCategories
-  );
-  usedCategories.push(highest2016);
+  for (let i = 2015; i <= 2019; i++) {
+    const highest = highestForYear(
+      filterYear(policeIntervention, i),
+      usedCategories
+    );
+    usedCategories.push(highest);
+    breakdown.push({
+      year: i,
+      crime: highest,
+    });
+  }
 
-  const highest2017 = highestForYear(
-    filterYear(policeIntervention, 2017),
-    usedCategories
-  );
-  usedCategories.push(highest2017);
-
-  const highest2018 = highestForYear(
-    filterYear(policeIntervention, 2018),
-    usedCategories
-  );
-  usedCategories.push(highest2018);
-
-  const highest2019 = highestForYear(
-    filterYear(policeIntervention, 2019),
-    usedCategories
-  );
-  usedCategories.push(highest2019);
-
-  return [{
-      year: 2015,
-      crime: highest2015,
-    },
-    {
-      year: 2016,
-      crime: highest2016,
-    },
-    {
-      year: 2017,
-      crime: highest2017,
-    },
-    {
-      year: 2018,
-      crime: highest2018,
-    },
-    {
-      year: 2019,
-      crime: highest2019,
-    },
-  ];
+  return breakdown;
 };
 
 const whenDoTheyHappen = async () => {
-  const query = `
-  query {
-    policeIntervention {
-      date
-      shift
-    }
-  }
-`;
-
   const {
     policeIntervention
-  } = await request(`${host}/`, query);
+  } = await callAPI(whenDoTheyHappenQuery);
 
   const years = [2015, 2016, 2017, 2018, 2019];
   const day = [0, 0, 0, 0, 0];
